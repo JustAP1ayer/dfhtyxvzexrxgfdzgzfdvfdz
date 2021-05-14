@@ -1,7 +1,7 @@
 if game.CoreGui:FindFirstChild("NotificationUI") then
 warn("Already loaded gui!")
 else
-loadstring(game:HttpGet("https://banbus.cf/Scripts/notificationcreation"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/kluzkjhfjdzuiokzNotif"))()
 end
 local UI = game.CoreGui.NotificationUI
 function say(NotificationTitle, NotificationText, Delay)
