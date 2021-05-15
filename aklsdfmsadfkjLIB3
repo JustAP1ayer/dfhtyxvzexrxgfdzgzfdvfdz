@@ -1,1053 +1,749 @@
-local library = {count = 0, queue = {}, callbacks = {}, rainbowtable = {}, toggled = true, binds = {}};
-local defaults;
-do
-	local dragger = {};
-	do
-        local players = game:service('Players');
-		local player = players.LocalPlayer;
-		local mouse = player:GetMouse();
-		local run = game:service('RunService');
-		local stepped = run.Stepped;
-		dragger.new = function(obj)
-			spawn(function()
-				local minitial;
-				local initial;
-				local isdragging;
-				obj.InputBegan:Connect(function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-						isdragging = true;
-						minitial = input.Position;
-						initial = obj.Position;
-						local con;
-						con = stepped:Connect(function()
-							if isdragging then
-								local delta = Vector3.new(mouse.X, mouse.Y, 0) - minitial;
-								obj.Position = UDim2.new(initial.X.Scale, initial.X.Offset + delta.X, initial.Y.Scale, initial.Y.Offset + delta.Y);
-							else
-								con:Disconnect();
-							end;
-						end);
-						input.Changed:Connect(function()
-							if input.UserInputState == Enum.UserInputState.End then
-								isdragging = false;
-							end;
-						end);
-					end;
-				end);
-			end)
-		end;
+--[[
+
+   __    ____  __  __  ____  ____ 
+  /__\  (_   )(  )(  )(  _ \( ___)
+ /(__)\  / /_  )(__)(  )   / )__) 
+(__)(__)(____)(______)(_)\_)(____) 
+
+              
+]]--
+
+--light theme
+local theme = {
+    Tab_Color = Color3.fromRGB(255, 255, 255),
+    Tab_Text_Color = Color3.fromRGB(0, 0, 0),
+    Description_Color = Color3.fromRGB(255, 255, 255),
+    Description_Text_Color = Color3.fromRGB(0, 0, 0),
+    Container_Color = Color3.fromRGB(255, 255, 255),
+    Container_Text_Color = Color3.fromRGB(0, 0, 0),
+    Button_Text_Color = Color3.fromRGB(0, 0, 0),
+    Toggle_Box_Color = Color3.fromRGB(243, 243, 243),
+    Toggle_Inner_Color = Color3.fromRGB(94, 255, 180),
+    Toggle_Text_Color = Color3.fromRGB(0, 0, 0),
+    Toggle_Border_Color = Color3.fromRGB(225, 225, 225),
+    Slider_Bar_Color = Color3.fromRGB(243, 243, 243),
+    Slider_Inner_Color = Color3.fromRGB(94, 255, 180),
+    Slider_Text_Color = Color3.fromRGB(0, 0, 0),
+    Slider_Border_Color = Color3.fromRGB(255, 255, 255),
+    Dropdown_Text_Color = Color3.fromRGB(0, 0, 0),
+    Dropdown_Option_BorderSize = 1,
+    Dropdown_Option_BorderColor = Color3.fromRGB(235, 235, 235),
+    Dropdown_Option_Color = Color3.fromRGB(255, 255, 255),
+    Dropdown_Option_Text_Color = Color3.fromRGB(0, 0, 0),
+    TextBox_Text_Color = Color3.fromRGB(0, 0, 0),
+    TextBox_Color = Color3.fromRGB(255, 255, 255),
+    TextBox_Underline_Color = Color3.fromRGB(94, 255, 180)
+}
+
+--dark theme
+local dark_theme = {
+    Tab_Color = Color3.fromRGB(31, 32, 33),
+    Tab_Text_Color = Color3.fromRGB(255, 255, 255),
+    Description_Color = Color3.fromRGB(31, 32, 33),
+    Description_Text_Color = Color3.fromRGB(255, 255, 255),
+    Container_Color = Color3.fromRGB(31, 32, 33),
+    Container_Text_Color = Color3.fromRGB(255, 255, 255),
+    Button_Text_Color = Color3.fromRGB(255, 255, 255),
+    Toggle_Box_Color = Color3.fromRGB(31, 32, 33),
+    Toggle_Inner_Color = Color3.fromRGB(255, 92, 92),
+    Toggle_Text_Color = Color3.fromRGB(255, 255, 255),
+    Toggle_Border_Color = Color3.fromRGB(50, 49, 50),
+    Slider_Bar_Color = Color3.fromRGB(31, 32, 33),
+    Slider_Inner_Color = Color3.fromRGB(255, 92, 92),
+    Slider_Text_Color = Color3.fromRGB(255, 255, 255),
+    Slider_Border_Color = Color3.fromRGB(50, 49, 50),
+    Dropdown_Text_Color = Color3.fromRGB(255, 255, 255),
+    Dropdown_Option_BorderSize = 1,
+    Dropdown_Option_BorderColor = Color3.fromRGB(49, 50, 51),
+    Dropdown_Option_Color = Color3.fromRGB(31, 32, 33),
+    Dropdown_Option_Text_Color = Color3.fromRGB(255, 255, 255),
+    TextBox_Text_Color = Color3.fromRGB(255, 255, 255),
+    TextBox_Color = Color3.fromRGB(31, 32, 33),
+    TextBox_Underline_Color = Color3.fromRGB(255, 92, 92)
+}
+
+if game:GetService("CoreGui"):FindFirstChild("uiui") then game:GetService("CoreGui"):FindFirstChild("uiui"):Destroy() end
+
+local library = {}
+local uiui = Instance.new("ScreenGui")
+local background = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local UIPadding = Instance.new("UIPadding")
+
+local TweenService = game:GetService("TweenService")
+
+uiui.Name = "uiui"
+uiui.Parent = game:GetService("CoreGui")
+uiui.DisplayOrder = 1
+
+background.Name = "background"
+background.Parent = uiui
+background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+background.BackgroundTransparency = 1.000
+background.Size = UDim2.new(0, 1234, 0, 664)
+
+UIListLayout.Parent = background
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 10)
+
+UIPadding.Parent = background
+UIPadding.PaddingLeft = UDim.new(0, 10)
+UIPadding.PaddingTop = UDim.new(0, 10)
+
+function library:CreateTab(text, desc, mode)
+    text = text or ""
+    desc = desc or ""
+    mode = mode or false
+	
+    if mode then
+        theme = dark_theme
+    elseif mode == nil then
+        theme = _G.CustomTheme
     end
-    
-    local types = {}; do
-        types.__index = types;
-        function types.window(name, options)
-            library.count = library.count + 1
-            local newWindow = library:Create('Frame', {
-                Name = name;
-                Size = UDim2.new(0, 190, 0, 30);
-                BackgroundColor3 = options.topcolor;
-                BorderSizePixel = 0;
-                Parent = library.container;
-                Position = UDim2.new(0, (15 + (200 * library.count) - 200), 0, 0);
-                ZIndex = 3;
-                library:Create('TextLabel', {
-                    Text = name;
-                    Size = UDim2.new(1, -10, 1, 0);
-                    Position = UDim2.new(0, 5, 0, 0);
-                    BackgroundTransparency = 1;
-                    Font = Enum.Font.Code;
-                    TextSize = options.titlesize;
-                    Font = options.titlefont;
-                    TextColor3 = options.titletextcolor;
-                    TextStrokeTransparency = library.options.titlestroke;
-                    TextStrokeColor3 = library.options.titlestrokecolor;
-                    ZIndex = 3;
-                });
-                library:Create("TextButton", {
-                    Size = UDim2.new(0, 30, 0, 30);
-                    Position = UDim2.new(1, -35, 0, 0);
-                    BackgroundTransparency = 1;
-                    Text = "-";
-                    TextSize = options.titlesize;
-                    Font = options.titlefont;--Enum.Font.Code;
-                    Name = 'window_toggle';
-                    TextColor3 = options.titletextcolor;
-                    TextStrokeTransparency = library.options.titlestroke;
-                    TextStrokeColor3 = library.options.titlestrokecolor;
-                    ZIndex = 3;
-                });
-                library:Create("Frame", {
-                    Name = 'Underline';
-                    Size = UDim2.new(1, 0, 0, 2);
-                    Position = UDim2.new(0, 0, 1, -2);
-                    BackgroundColor3 = (options.underlinecolor ~= "rainbow" and options.underlinecolor or Color3.new());
-                    BorderSizePixel = 0;
-                    ZIndex = 3;
-                });
-                library:Create('Frame', {
-                    Name = 'container';
-                    Position = UDim2.new(0, 0, 1, 0);
-                    Size = UDim2.new(1, 0, 0, 0);
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = options.bgcolor;
-                    ClipsDescendants = false;
-                    library:Create('UIListLayout', {
-                        Name = 'List';
-                        SortOrder = Enum.SortOrder.LayoutOrder;
-                    })
-                });
-            })
-            
-            if options.underlinecolor == "rainbow" then
-                table.insert(library.rainbowtable, newWindow:FindFirstChild('Underline'))
+    local Tab = Instance.new("ImageButton")
+    local tabtext = Instance.new("TextLabel")
+    local description = Instance.new("ImageLabel")
+    local descriptionText = Instance.new("TextLabel")
+    local container = Instance.new("ImageLabel")
+    local MainPadder = Instance.new("UIListLayout")
+    local MainLiser = Instance.new("UIListLayout")
+
+    MainPadder.Name = "MainPadder"
+    MainPadder.Parent = container
+    MainPadder.SortOrder = Enum.SortOrder.LayoutOrder
+
+    MainLiser.Name = "MainLiser"
+    MainLiser.Parent = container
+    MainLiser.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local TextBounds =
+        game:GetService("TextService"):GetTextSize(
+        desc,
+        14,
+        Enum.Font.SourceSansLight,
+        Vector2.new(math.huge, math.huge)
+    )
+
+    Tab.Name = math.random(1, 15) .. text .. " Tab"
+    Tab.Parent = background
+    Tab.ImageColor3 = theme.Tab_Color
+    Tab.BackgroundTransparency = 1.000
+    Tab.Size = UDim2.new(0, 155, 0, 30)
+    Tab.Image = "rbxassetid://3570695787"
+    Tab.ScaleType = Enum.ScaleType.Slice
+    Tab.SliceCenter = Rect.new(100, 100, 100, 100)
+    Tab.SliceScale = 0.030
+    local HoverEffect = true
+    local IsOpen = false
+    Tab.MouseEnter:Connect(
+        function()
+            if HoverEffect and IsOpen == false then
+                TweenService:Create(
+                    description,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, TextBounds.X + 20, 0, 30)}
+                ):Play()
+			else
+				TweenService:Create(
+                    description,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, 0, 0, 30)}
+                ):Play()
             end
+        end
+    )
+    Tab.MouseLeave:Connect(
+        function()
+            TweenService:Create(
+                description,
+                TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                {Size = UDim2.new(0, 0, 0, 30)}
+            ):Play()
+        end
+    )
+    tabtext.Name = "tabtext"
+    tabtext.Parent = Tab
+    tabtext.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    tabtext.BackgroundTransparency = 1.000
+    tabtext.Size = UDim2.new(0, 155, 0, 30)
+    tabtext.Font = Enum.Font.SourceSansLight
+    tabtext.Text = text
+    tabtext.TextColor3 = theme.Tab_Text_Color
+    tabtext.TextSize = 16.000
 
-            local window = setmetatable({
-                count = 0;
-                object = newWindow;
-                container = newWindow.container;
-                toggled = true;
-                flags   = {};
+    description.Name = "description"
+    description.Parent = Tab
+    description.ImageColor3 = theme.Description_Color
+    description.BackgroundTransparency = 1.000
+    description.BorderSizePixel = 0
+    description.ClipsDescendants = true
+    description.Position = UDim2.new(1.04969442, 0, -0.022590382, 0)
+    description.Size = UDim2.new(0, 0, 0, 30)
+    description.Image = "rbxassetid://3570695787"
+    description.ScaleType = Enum.ScaleType.Slice
+    description.SliceCenter = Rect.new(100, 100, 100, 100)
+    description.SliceScale = 0.030
 
-            }, types)
+    descriptionText.Name = "descriptionText"
+    descriptionText.Parent = description
+    descriptionText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    descriptionText.BackgroundTransparency = 1.000
+    descriptionText.Position = UDim2.new(0, 0, 0.022590382, 0)
+    descriptionText.Size = UDim2.new(0, TextBounds.X + 20, 0, 30)
+    descriptionText.Font = Enum.Font.SourceSansLight
+    descriptionText.Text = desc
+    descriptionText.TextColor3 = theme.Description_Text_Color
+    descriptionText.TextSize = 14.000
 
-            table.insert(library.queue, {
-                w = window.object;
-                p = window.object.Position;
-            })
+    local BodyYSize = 0
 
-            newWindow:FindFirstChild("window_toggle").MouseButton1Click:connect(function()
-                window.toggled = not window.toggled;
-                newWindow:FindFirstChild("window_toggle").Text = (window.toggled and "+" or "-")
-                if (not window.toggled) then
-                    window.container.ClipsDescendants = true;
-                end
-                wait();
-                local y = 0;
-                for i, v in next, window.container:GetChildren() do
-                    if (not v:IsA('UIListLayout')) then
-                        y = y + v.AbsoluteSize.Y;
+    container.Name = "container"
+    container.Parent = Tab
+    container.ImageColor3 = theme.Container_Color
+    container.BackgroundTransparency = 1.000
+    container.BorderSizePixel = 0
+    container.ClipsDescendants = true
+    container.Position = UDim2.new(1.04969442, 0, -0.022590382, 0)
+    container.Size = UDim2.new(0, 185, 0, 0)
+    container.Image = "rbxassetid://3570695787"
+    container.ScaleType = Enum.ScaleType.Slice
+    container.SliceCenter = Rect.new(100, 100, 100, 100)
+    container.SliceScale = 0.030
+    local HoverEffect = true
+    Tab.MouseButton1Click:Connect(
+        function()
+            for i, v in next, background:GetChildren() do
+                for i, v in next, v:GetChildren() do
+                    if v.Name == "container" and v.Name ~= Tab.Name then
+						IsOpen = false
+                        TweenService:Create(
+                            v,
+                            TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+                            {Size = UDim2.new(0, 185, 0, 0)}
+                        ):Play()
+                        HoverEffect = false
                     end
-                end 
-
-                local targetSize = window.toggled and UDim2.new(1, 0, 0, y+5) or UDim2.new(1, 0, 0, 0);
-                local targetDirection = window.toggled and "In" or "Out"
-
-                window.container:TweenSize(targetSize, targetDirection, "Quad", 0.15, true)
-                wait(.15)
-                if window.toggled then
-                    window.container.ClipsDescendants = false;
-                end
-            end)
-
-            return window;
-        end
-        
-        function types:Resize()
-            local y = 0;
-            for i, v in next, self.container:GetChildren() do
-                if (not v:IsA('UIListLayout')) then
-                    y = y + v.AbsoluteSize.Y;
-                end
-            end 
-            self.container.Size = UDim2.new(1, 0, 0, y+5)
-        end
-        
-        function types:GetOrder() 
-            local c = 0;
-            for i, v in next, self.container:GetChildren() do
-                if (not v:IsA('UIListLayout')) then
-                    c = c + 1
+					IsOpen = true
+                    TweenService:Create(
+                        container,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+                        {Size = UDim2.new(0, 185, 0, BodyYSize)}
+                    ):Play()
+					HoverEffect = true
                 end
             end
-            return c
-        end
-        
-        function types:Toggle(name, options, callback)
-            local default  = options.default or false;
-            local location = options.location or self.flags;
-            local flag     = options.flag or "";
-            local callback = callback or function() end;
-            
-            location[flag] = default;
-
-            local check = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 25);
-                LayoutOrder = self:GetOrder();
-                library:Create('TextLabel', {
-                    Name = name;
-                    Text = "\r" .. name;
-                    BackgroundTransparency = 1;
-                    TextColor3 = library.options.textcolor;
-                    Position = UDim2.new(0, 5, 0, 0);
-                    Size     = UDim2.new(1, -5, 1, 0);
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                    library:Create('TextButton', {
-                        Text = (location[flag] and utf8.char(10003) or "");
-                        Font = library.options.font;
-                        TextSize = library.options.fontsize;
-                        Name = 'Checkmark';
-                        Size = UDim2.new(0, 20, 0, 20);
-                        Position = UDim2.new(1, -25, 0, 4);
-                        TextColor3 = library.options.textcolor;
-                        BackgroundColor3 = library.options.bgcolor;
-                        BorderColor3 = library.options.bordercolor;
-                        TextStrokeTransparency = library.options.textstroke;
-                        TextStrokeColor3 = library.options.strokecolor;
-                    })
-                });
-                Parent = self.container;
-            });
+            if container.Size == UDim2.new(0, 185, 0, BodyYSize) then
+				IsOpen = false
+                TweenService:Create(
+                    container,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+                    {Size = UDim2.new(0, 185, 0, 0)}
+                ):Play()
                 
-            local function click(t)
-                location[flag] = not location[flag];
-                callback(location[flag])
-                check:FindFirstChild(name).Checkmark.Text = location[flag] and utf8.char(10003) or "";
-            end
-
-            check:FindFirstChild(name).Checkmark.MouseButton1Click:connect(click)
-            library.callbacks[flag] = click;
-
-            if location[flag] == true then
-                callback(location[flag])
-            end
-
-            self:Resize();
-            return {
-                Set = function(self, b)
-                    location[flag] = b;
-                    callback(location[flag])
-                    check:FindFirstChild(name).Checkmark.Text = location[flag] and utf8.char(10003) or "";
-                end
-            }
-        end
-        
-        function types:Button(name, callback)
-            callback = callback or function() end;
-            
-            local check = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 25);
-                LayoutOrder = self:GetOrder();
-                library:Create('TextButton', {
-                    Name = name;
-                    Text = name;
-                    BackgroundColor3 = library.options.btncolor;
-                    BorderColor3 = library.options.bordercolor;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                    TextColor3 = library.options.textcolor;
-                    Position = UDim2.new(0, 5, 0, 5);
-                    Size     = UDim2.new(1, -10, 0, 20);
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                });
-                Parent = self.container;
-            });
-            
-            check:FindFirstChild(name).MouseButton1Click:connect(callback)
-            self:Resize();
-
-            return {
-                Fire = function()
-                    callback();
-                end
-            }
-        end
-        
-        function types:Box(name, options, callback) --type, default, data, location, flag)
-            local type   = options.type or "";
-            local default = options.default or "";
-            local data = options.data
-            local location = options.location or self.flags;
-            local flag     = options.flag or "";
-            local callback = callback or function() end;
-            local min      = options.min or 0;
-            local max      = options.max or 9e9;
-
-            if type == 'number' and (not tonumber(default)) then
-                location[flag] = default;
-            else
-                location[flag] = "";
-                default = "";
-            end
-
-            local check = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 25);
-                LayoutOrder = self:GetOrder();
-                library:Create('TextLabel', {
-                    Name = name;
-                    Text = "\r" .. name;
-                    BackgroundTransparency = 1;
-                    TextColor3 = library.options.textcolor;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                    Position = UDim2.new(0, 5, 0, 0);
-                    Size     = UDim2.new(1, -5, 1, 0);
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                    library:Create('TextBox', {
-                        TextStrokeTransparency = library.options.textstroke;
-                        TextStrokeColor3 = library.options.strokecolor;
-                        Text = tostring(default);
-                        Font = library.options.font;
-                        TextSize = library.options.fontsize;
-                        Name = 'Box';
-                        Size = UDim2.new(0, 60, 0, 20);
-                        Position = UDim2.new(1, -65, 0, 3);
-                        TextColor3 = library.options.textcolor;
-                        BackgroundColor3 = library.options.boxcolor;
-                        BorderColor3 = library.options.bordercolor;
-                        PlaceholderColor3 = library.options.placeholdercolor;
-                    })
-                });
-                Parent = self.container;
-            });
-        
-            local box = check:FindFirstChild(name):FindFirstChild('Box');
-            box.FocusLost:connect(function(e)
-                local old = location[flag];
-                if type == "number" then
-                    local num = tonumber(box.Text)
-                    if (not num) then
-                        box.Text = tonumber(location[flag])
-                    else
-                        location[flag] = math.clamp(num, min, max)
-                        box.Text = tonumber(location[flag])
-                    end
-                else
-                    location[flag] = tostring(box.Text)
-                end
-
-                callback(location[flag], old, e)
-            end)
-            
-            if type == 'number' then
-                box:GetPropertyChangedSignal('Text'):connect(function()
-                    box.Text = string.gsub(box.Text, "[%a+]", "");
-                end)
-            end
-            
-            self:Resize();
-            return box
-        end
-        
-        function types:Bind(name, options, callback)
-            local location     = options.location or self.flags;
-            local keyboardOnly = options.kbonly or false
-            local flag         = options.flag or "";
-            local callback     = callback or function() end;
-            local default      = options.default;
-            location[flag] = default;
-            local banned = {
-                Return = true;
-                Space = true;
-                Tab = true;
-                Unknown = true;
-            }
-            
-            local shortNames = {
-                RightControl = 'RightCtrl';
-                LeftControl = 'LeftCtrl';
-                LeftShift = 'LShift';
-                RightShift = 'RShift';
-                MouseButton1 = "Mouse1";
-                MouseButton2 = "Mouse2";
-            }
-            
-            local allowed = {
-                MouseButton1 = true;
-                MouseButton2 = true;
-            }      
-
-            local nm = (default and (shortNames[default.Name] or default.Name) or "None");
-            local check = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 30);
-                LayoutOrder = self:GetOrder();
-                library:Create('TextLabel', {
-                    Name = name;
-                    Text = "\r" .. name;
-                    BackgroundTransparency = 1;
-                    TextColor3 = library.options.textcolor;
-                    Position = UDim2.new(0, 5, 0, 0);
-                    Size     = UDim2.new(1, -5, 1, 0);
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                    BorderColor3     = library.options.bordercolor;
-                    BorderSizePixel  = 1;
-                    library:Create('TextButton', {
-                        Name = 'Keybind';
-                        Text = nm;
-                        TextStrokeTransparency = library.options.textstroke;
-                        TextStrokeColor3 = library.options.strokecolor;
-                        Font = library.options.font;
-                        TextSize = library.options.fontsize;
-                        Size = UDim2.new(0, 60, 0, 20);
-                        Position = UDim2.new(1, -65, 0, 5);
-                        TextColor3 = library.options.textcolor;
-                        BackgroundColor3 = library.options.bgcolor;
-                        BorderColor3     = library.options.bordercolor;
-                        BorderSizePixel  = 1;
-                    })
-                });
-                Parent = self.container;
-            });
-             
-            local button = check:FindFirstChild(name).Keybind;
-            button.MouseButton1Click:connect(function()
-                library.binding = true
-
-                button.Text = "..."
-                local a, b = game:GetService('UserInputService').InputBegan:wait();
-                local name = tostring(a.KeyCode.Name);
-                local typeName = tostring(a.UserInputType.Name);
-
-                if (a.UserInputType ~= Enum.UserInputType.Keyboard and (allowed[a.UserInputType.Name]) and (not keyboardOnly)) or (a.KeyCode and (not banned[a.KeyCode.Name])) then
-                    local name = (a.UserInputType ~= Enum.UserInputType.Keyboard and a.UserInputType.Name or a.KeyCode.Name);
-                    location[flag] = (a);
-                    button.Text = shortNames[name] or name;
-                    
-                else
-                    if (location[flag]) then
-                        if (not pcall(function()
-                            return location[flag].UserInputType
-                        end)) then
-                            local name = tostring(location[flag])
-                            button.Text = shortNames[name] or name
-                        else
-                            local name = (location[flag].UserInputType ~= Enum.UserInputType.Keyboard and location[flag].UserInputType.Name or location[flag].KeyCode.Name);
-                            button.Text = shortNames[name] or name;
-                        end
-                    end
-                end
-
-                wait(0.1)  
-                library.binding = false;
-            end)
-            
-            if location[flag] then
-                button.Text = shortNames[tostring(location[flag].Name)] or tostring(location[flag].Name)
-            end
-
-            library.binds[flag] = {
-                location = location;
-                callback = callback;
-            };
-
-            self:Resize();
-        end
-    
-        function types:Section(name)
-            local order = self:GetOrder();
-            local determinedSize = UDim2.new(1, 0, 0, 25)
-            local determinedPos = UDim2.new(0, 0, 0, 4);
-            local secondarySize = UDim2.new(1, 0, 0, 20);
-                        
-            if order == 0 then
-                determinedSize = UDim2.new(1, 0, 0, 21)
-                determinedPos = UDim2.new(0, 0, 0, -1);
-                secondarySize = nil
-            end
-            
-            local check = library:Create('Frame', {
-                Name = 'Section';
-                BackgroundTransparency = 1;
-                Size = determinedSize;
-                BackgroundColor3 = library.options.sectncolor;
-                BorderSizePixel = 0;
-                LayoutOrder = order;
-                library:Create('TextLabel', {
-                    Name = 'section_lbl';
-                    Text = name;
-                    BackgroundTransparency = 0;
-                    BorderSizePixel = 0;
-                    BackgroundColor3 = library.options.sectncolor;
-                    TextColor3 = library.options.textcolor;
-                    Position = determinedPos;
-                    Size     = (secondarySize or UDim2.new(1, 0, 1, 0));
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                });
-                Parent = self.container;
-            });
-        
-            self:Resize();
-        end
-
-        function types:Slider(name, options, callback)
-            local default = options.default or options.min;
-            local min     = options.min or 0;
-            local max      = options.max or 1;
-            local location = options.location or self.flags;
-            local precise  = options.precise  or false -- e.g 0, 1 vs 0, 0.1, 0.2, ...
-            local flag     = options.flag or "";
-            local callback = callback or function() end
-
-            location[flag] = default;
-
-            local check = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 25);
-                LayoutOrder = self:GetOrder();
-                library:Create('TextLabel', {
-                    Name = name;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                    Text = "\r" .. name;
-                    BackgroundTransparency = 1;
-                    TextColor3 = library.options.textcolor;
-                    Position = UDim2.new(0, 5, 0, 2);
-                    Size     = UDim2.new(1, -5, 1, 0);
-                    TextXAlignment = Enum.TextXAlignment.Left;
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                    library:Create('Frame', {
-                        Name = 'Container';
-                        Size = UDim2.new(0, 60, 0, 20);
-                        Position = UDim2.new(1, -65, 0, 3);
-                        BackgroundTransparency = 1;
-                        --BorderColor3 = library.options.bordercolor;
-                        BorderSizePixel = 0;
-                        library:Create('TextLabel', {
-                            Name = 'ValueLabel';
-                            Text = default;
-                            BackgroundTransparency = 1;
-                            TextColor3 = library.options.textcolor;
-                            Position = UDim2.new(0, -10, 0, 0);
-                            Size     = UDim2.new(0, 1, 1, 0);
-                            TextXAlignment = Enum.TextXAlignment.Right;
-                            Font = library.options.font;
-                            TextSize = library.options.fontsize;
-                            TextStrokeTransparency = library.options.textstroke;
-                            TextStrokeColor3 = library.options.strokecolor;
-                        });
-                        library:Create('TextButton', {
-                            Name = 'Button';
-                            Size = UDim2.new(0, 5, 1, -2);
-                            Position = UDim2.new(0, 0, 0, 1);
-                            AutoButtonColor = false;
-                            Text = "";
-                            BackgroundColor3 = Color3.fromRGB(20, 20, 20);
-                            BorderSizePixel = 0;
-                            ZIndex = 2;
-                            TextStrokeTransparency = library.options.textstroke;
-                            TextStrokeColor3 = library.options.strokecolor;
-                        });
-                        library:Create('Frame', {
-                            Name = 'Line';
-                            BackgroundTransparency = 0;
-                            Position = UDim2.new(0, 0, 0.5, 0);
-                            Size     = UDim2.new(1, 0, 0, 1);
-                            BackgroundColor3 = Color3.fromRGB(255, 255, 255);
-                            BorderSizePixel = 0;
-                        });
-                    })
-                });
-                Parent = self.container;
-            });
-
-            local overlay = check:FindFirstChild(name);
-
-            local renderSteppedConnection;
-            local inputBeganConnection;
-            local inputEndedConnection;
-            local mouseLeaveConnection;
-            local mouseDownConnection;
-            local mouseUpConnection;
-
-            check:FindFirstChild(name).Container.MouseEnter:connect(function()
-                local function update()
-                    if renderSteppedConnection then renderSteppedConnection:disconnect() end 
-                    
-
-                    renderSteppedConnection = game:GetService('RunService').RenderStepped:connect(function()
-                        local mouse = game:GetService("UserInputService"):GetMouseLocation()
-                        local percent = (mouse.X - overlay.Container.AbsolutePosition.X) / (overlay.Container.AbsoluteSize.X)
-                        percent = math.clamp(percent, 0, 1)
-                        percent = tonumber(string.format("%.2f", percent))
-
-                        overlay.Container.Button.Position = UDim2.new(math.clamp(percent, 0, 0.99), 0, 0, 1)
-                        
-                        local num = min + (max - min) * percent
-                        local value = (precise and num or math.floor(num))
-
-                        overlay.Container.ValueLabel.Text = value;
-                        callback(tonumber(value))
-                        location[flag] = tonumber(value)
-                    end)
-                end
-
-                local function disconnect()
-                    if renderSteppedConnection then renderSteppedConnection:disconnect() end
-                    if inputBeganConnection then inputBeganConnection:disconnect() end
-                    if inputEndedConnection then inputEndedConnection:disconnect() end
-                    if mouseLeaveConnection then mouseLeaveConnection:disconnect() end
-                    if mouseUpConnection then mouseUpConnection:disconnect() end
-                end
-
-                inputBeganConnection = check:FindFirstChild(name).Container.InputBegan:connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        update()
-                    end
-                end)
-
-                inputEndedConnection = check:FindFirstChild(name).Container.InputEnded:connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        disconnect()
-                    end
-                end)
-
-                mouseDownConnection = check:FindFirstChild(name).Container.Button.MouseButton1Down:connect(update)
-                mouseUpConnection   = game:GetService("UserInputService").InputEnded:connect(function(a, b)
-                    if a.UserInputType == Enum.UserInputType.MouseButton1 and (mouseDownConnection.Connected) then
-                        disconnect()
-                    end
-                end)
-            end)    
-
-            if default ~= min then
-                local percent = 1 - ((max - default) / (max - min))
-                local number  = default 
-
-                number = tonumber(string.format("%.2f", number))
-                if (not precise) then
-                    number = math.floor(number)
-                end
-
-                overlay.Container.Button.Position  = UDim2.new(math.clamp(percent, 0, 0.99), 0,  0, 1) 
-                overlay.Container.ValueLabel.Text  = number
-            end
-
-            self:Resize();
-            return {
-                Set = function(self, value)
-                    local percent = 1 - ((max - value) / (max - min))
-                    local number  = value 
-
-                    number = tonumber(string.format("%.2f", number))
-                    if (not precise) then
-                        number = math.floor(number)
-                    end
-
-                    overlay.Container.Button.Position  = UDim2.new(math.clamp(percent, 0, 0.99), 0,  0, 1) 
-                    overlay.Container.ValueLabel.Text  = number
-                    location[flag] = number
-                    callback(number)
-                end
-            }
-        end 
-
-        function types:SearchBox(text, options, callback)
-            local list = options.list or {};
-            local flag = options.flag or "";
-            local location = options.location or self.flags;
-            local callback = callback or function() end;
-
-            local busy = false;
-            local box = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 25);
-                LayoutOrder = self:GetOrder();
-                library:Create('TextBox', {
-                    Text = "";
-                    PlaceholderText = text;
-                    PlaceholderColor3 = Color3.fromRGB(60, 60, 60);
-                    Font = library.options.font;
-                    TextSize = library.options.fontsize;
-                    Name = 'Box';
-                    Size = UDim2.new(1, -10, 0, 20);
-                    Position = UDim2.new(0, 5, 0, 4);
-                    TextColor3 = library.options.textcolor;
-                    BackgroundColor3 = library.options.dropcolor;
-                    BorderColor3 = library.options.bordercolor;
-                    TextStrokeTransparency = library.options.textstroke;
-                    TextStrokeColor3 = library.options.strokecolor;
-                    library:Create('ScrollingFrame', {
-                        Position = UDim2.new(0, 0, 1, 1);
-                        Name = 'Container';
-                        BackgroundColor3 = library.options.btncolor;
-                        ScrollBarThickness = 0;
-                        BorderSizePixel = 0;
-                        BorderColor3 = library.options.bordercolor;
-                        Size = UDim2.new(1, 0, 0, 0);
-                        library:Create('UIListLayout', {
-                            Name = 'ListLayout';
-                            SortOrder = Enum.SortOrder.LayoutOrder;
-                        });
-                        ZIndex = 2;
-                    });
-                });
-                Parent = self.container;
-            })
-
-            local function rebuild(text)
-                box:FindFirstChild('Box').Container.ScrollBarThickness = 0
-                for i, child in next, box:FindFirstChild('Box').Container:GetChildren() do
-                    if (not child:IsA('UIListLayout')) then
-                        child:Destroy();
-                    end
-                end
-
-                if #text > 0 then
-                    for i, v in next, list do
-                        if string.sub(string.lower(v), 1, string.len(text)) == string.lower(text) then
-                            local button = library:Create('TextButton', {
-                                Text = v;
-                                Font = library.options.font;
-                                TextSize = library.options.fontsize;
-                                TextColor3 = library.options.textcolor;
-                                BorderColor3 = library.options.bordercolor;
-                                TextStrokeTransparency = library.options.textstroke;
-                                TextStrokeColor3 = library.options.strokecolor;
-                                Parent = box:FindFirstChild('Box').Container;
-                                Size = UDim2.new(1, 0, 0, 20);
-                                LayoutOrder = i;
-                                BackgroundColor3 = library.options.btncolor;
-                                ZIndex = 2;
-                            })
-
-                            button.MouseButton1Click:connect(function()
-                                busy = true;
-                                box:FindFirstChild('Box').Text = button.Text;
-                                wait();
-                                busy = false;
-
-                                location[flag] = button.Text;
-                                callback(location[flag])
-
-                                box:FindFirstChild('Box').Container.ScrollBarThickness = 0
-                                for i, child in next, box:FindFirstChild('Box').Container:GetChildren() do
-                                    if (not child:IsA('UIListLayout')) then
-                                        child:Destroy();
-                                    end
-                                end
-                                box:FindFirstChild('Box').Container:TweenSize(UDim2.new(1, 0, 0, 0), 'Out', 'Quad', 0.25, true)
-                            end)
-                        end
-                    end
-                end
-
-                local c = box:FindFirstChild('Box').Container:GetChildren()
-                local ry = (20 * (#c)) - 20
-
-                local y = math.clamp((20 * (#c)) - 20, 0, 100)
-                if ry > 100 then
-                    box:FindFirstChild('Box').Container.ScrollBarThickness = 5;
-                end
-
-                box:FindFirstChild('Box').Container:TweenSize(UDim2.new(1, 0, 0, y), 'Out', 'Quad', 0.25, true)
-                box:FindFirstChild('Box').Container.CanvasSize = UDim2.new(1, 0, 0, (20 * (#c)) - 20)
-            end
-
-            box:FindFirstChild('Box'):GetPropertyChangedSignal('Text'):connect(function()
-                if (not busy) then
-                    rebuild(box:FindFirstChild('Box').Text)
-                end
-            end);
-
-            local function reload(new_list)
-                list = new_list;
-                rebuild("")
-            end
-            self:Resize();
-            return reload, box:FindFirstChild('Box');
-        end
-        
-        function types:Dropdown(name, options, callback)
-            local location = options.location or self.flags;
-            local flag = options.flag or "";
-            local callback = callback or function() end;
-            local list = options.list or {};
-
-            location[flag] = list[1]
-            local check = library:Create('Frame', {
-                BackgroundTransparency = 1;
-                Size = UDim2.new(1, 0, 0, 25);
-                BackgroundColor3 = Color3.fromRGB(25, 25, 25);
-                BorderSizePixel = 0;
-                LayoutOrder = self:GetOrder();
-                library:Create('Frame', {
-                    Name = 'dropdown_lbl';
-                    BackgroundTransparency = 0;
-                    BackgroundColor3 = library.options.dropcolor;
-                    Position = UDim2.new(0, 5, 0, 4);
-                    BorderColor3 = library.options.bordercolor;
-                    Size     = UDim2.new(1, -10, 0, 20);
-                    library:Create('TextLabel', {
-                        Name = 'Selection';
-                        Size = UDim2.new(1, 0, 1, 0);
-                        Text = list[1];
-                        TextColor3 = library.options.textcolor;
-                        BackgroundTransparency = 1;
-                        Font = library.options.font;
-                        TextSize = library.options.fontsize;
-                        TextStrokeTransparency = library.options.textstroke;
-                        TextStrokeColor3 = library.options.strokecolor;
-                    });
-                    library:Create("TextButton", {
-                        Name = 'drop';
-                        BackgroundTransparency = 1;
-                        Size = UDim2.new(0, 20, 1, 0);
-                        Position = UDim2.new(1, -25, 0, 0);
-                        Text = 'v';
-                        TextColor3 = library.options.textcolor;
-                        Font = library.options.font;
-                        TextSize = library.options.fontsize;
-                        TextStrokeTransparency = library.options.textstroke;
-                        TextStrokeColor3 = library.options.strokecolor;
-                    })
-                });
-                Parent = self.container;
-            });
-            
-            local button = check:FindFirstChild('dropdown_lbl').drop;
-            local input;
-            
-            button.MouseButton1Click:connect(function()
-                if (input and input.Connected) then
-                    return
-                end 
+                TweenService:Create(
+                    description,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, TextBounds.X + 20, 0, 30)}
+                ):Play()
+                HoverEffect = true
+            elseif container.Size == UDim2.new(0, 185, 0, 0) then
+				IsOpen = true
+                TweenService:Create(
+                    container,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+                    {Size = UDim2.new(0, 185, 0, BodyYSize)}
+                ):Play()
                 
-                check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').TextColor3 = Color3.fromRGB(60, 60, 60);
-                check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text = name;
-                local c = 0;
-                for i, v in next, list do
-                    c = c + 20;
-                end
-
-                local size = UDim2.new(1, 0, 0, c)
-
-                local clampedSize;
-                local scrollSize = 0;
-                if size.Y.Offset > 100 then
-                    clampedSize = UDim2.new(1, 0, 0, 100)
-                    scrollSize = 5;
-                end
-                
-                local goSize = (clampedSize ~= nil and clampedSize) or size;    
-                local container = library:Create('ScrollingFrame', {
-                    TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png';
-                    BottomImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png';
-                    Name = 'DropContainer';
-                    Parent = check:FindFirstChild('dropdown_lbl');
-                    Size = UDim2.new(1, 0, 0, 0);
-                    BackgroundColor3 = library.options.bgcolor;
-                    BorderColor3 = library.options.bordercolor;
-                    Position = UDim2.new(0, 0, 1, 0);
-                    ScrollBarThickness = scrollSize;
-                    CanvasSize = UDim2.new(0, 0, 0, size.Y.Offset);
-                    ZIndex = 5;
-                    ClipsDescendants = true;
-                    library:Create('UIListLayout', {
-                        Name = 'List';
-                        SortOrder = Enum.SortOrder.LayoutOrder
-                    })
-                })
-
-                for i, v in next, list do
-                    local btn = library:Create('TextButton', {
-                        Size = UDim2.new(1, 0, 0, 20);
-                        BackgroundColor3 = library.options.btncolor;
-                        BorderColor3 = library.options.bordercolor;
-                        Text = v;
-                        Font = library.options.font;
-                        TextSize = library.options.fontsize;
-                        LayoutOrder = i;
-                        Parent = container;
-                        ZIndex = 5;
-                        TextColor3 = library.options.textcolor;
-                        TextStrokeTransparency = library.options.textstroke;
-                        TextStrokeColor3 = library.options.strokecolor;
-                    })
-                    
-                    btn.MouseButton1Click:connect(function()
-                        check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').TextColor3 = library.options.textcolor
-                        check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text = btn.Text;
-
-                        location[flag] = tostring(btn.Text);
-                        callback(location[flag])
-
-                        game:GetService('Debris'):AddItem(container, 0)
-                        input:disconnect();
-                    end)
-                end
-                
-                container:TweenSize(goSize, 'Out', 'Quad', 0.15, true)
-                
-                local function isInGui(frame)
-                    local mloc = game:GetService('UserInputService'):GetMouseLocation();
-                    local mouse = Vector2.new(mloc.X, mloc.Y - 36);
-                    
-                    local x1, x2 = frame.AbsolutePosition.X, frame.AbsolutePosition.X + frame.AbsoluteSize.X;
-                    local y1, y2 = frame.AbsolutePosition.Y, frame.AbsolutePosition.Y + frame.AbsoluteSize.Y;
-                
-                    return (mouse.X >= x1 and mouse.X <= x2) and (mouse.Y >= y1 and mouse.Y <= y2)
-                end
-                
-                input = game:GetService('UserInputService').InputBegan:connect(function(a)
-                    if a.UserInputType == Enum.UserInputType.MouseButton1 and (not isInGui(container)) then
-                        check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').TextColor3 = library.options.textcolor
-                        check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').Text       = location[flag];
-
-                        container:TweenSize(UDim2.new(1, 0, 0, 0), 'In', 'Quad', 0.15, true)
-                        wait(0.15)
-
-                        game:GetService('Debris'):AddItem(container, 0)
-                        input:disconnect();
-                    end
-                end)
-            end)
-            
-            self:Resize();
-            local function reload(self, array)
-                options = array;
-                location[flag] = array[1];
-                pcall(function()
-                    input:disconnect()
-                end)
-                check:WaitForChild('dropdown_lbl').Selection.Text = location[flag]
-                check:FindFirstChild('dropdown_lbl'):WaitForChild('Selection').TextColor3 = library.options.textcolor
-                game:GetService('Debris'):AddItem(container, 0)
+                TweenService:Create(
+                    description,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, 0, 0, 30)}
+                ):Play()
+                HoverEffect = false
             end
-
-            return {
-                Refresh = reload;
-            }
         end
+    )
+
+    local function resize(value)
+        BodyYSize = BodyYSize + value
     end
-    
-    function library:Create(class, data)
-        local obj = Instance.new(class);
-        for i, v in next, data do
-            if i ~= 'Parent' then
-                
-                if typeof(v) == "Instance" then
-                    v.Parent = obj;
-                else
-                    obj[i] = v
-                end
+
+    local s = {}
+
+    function s:CreateToggle(text, callback)
+        text = text or ""
+        callback = callback or function()
             end
-        end
-        
-        obj.Parent = data.Parent;
-        return obj
-    end
-    
-    function library:CreateWindow(name, options)
-        if (not library.container) then
-            library.container = self:Create("ScreenGui", {
-                self:Create('Frame', {
-                    Name = 'Container';
-                    Size = UDim2.new(1, -30, 1, 0);
-                    Position = UDim2.new(0, 20, 0, 20);
-                    BackgroundTransparency = 1;
-                    Active = false;
-                });
-                Parent = game:GetService("CoreGui");
-            }):FindFirstChild('Container');
-        end
-        
-        if (not library.options) then
-            library.options = setmetatable(options or {}, {__index = defaults})
-        end
-        
-        local window = types.window(name, library.options);
-        dragger.new(window.object);
-        return window
-    end
-    
-    default = {
-        topcolor       = Color3.fromRGB(30, 30, 30);
-        titlecolor     = Color3.fromRGB(255, 255, 255);
-        
-        underlinecolor = Color3.fromRGB(0, 255, 140);
-        bgcolor        = Color3.fromRGB(35, 35, 35);
-        boxcolor       = Color3.fromRGB(35, 35, 35);
-        btncolor       = Color3.fromRGB(25, 25, 25);
-        dropcolor      = Color3.fromRGB(25, 25, 25);
-        sectncolor     = Color3.fromRGB(25, 25, 25);
-        bordercolor    = Color3.fromRGB(60, 60, 60);
+        local Toggle = Instance.new("TextButton")
+        local ToggleBox = Instance.new("Frame")
+        local ToggleInner = Instance.new("Frame")
+        local ToggleText = Instance.new("TextLabel")
 
-        font           = Enum.Font.SourceSans;
-        titlefont      = Enum.Font.Code;
+        Toggle.Name = "Toggle"
+        Toggle.Parent = container
+        Toggle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Toggle.BackgroundTransparency = 1.000
+        Toggle.Size = UDim2.new(0, 185, 0, 30)
+        Toggle.Font = Enum.Font.SourceSans
+        Toggle.Text = ""
+        Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
+        Toggle.TextSize = 14.000
 
-        fontsize       = 17;
-        titlesize      = 18;
+        ToggleBox.Name = "ToggleBox"
+        ToggleBox.Parent = Toggle
+        ToggleBox.BackgroundColor3 = theme.Toggle_Box_Color
+        ToggleBox.BorderColor3 = theme.Toggle_Border_Color
+        ToggleBox.Position = UDim2.new(0.0416216031, 0, 0.166666672, 0)
+        ToggleBox.Size = UDim2.new(0, 20, 0, 20)
 
-        textstroke     = 1;
-        titlestroke    = 1;
+        ToggleInner.Name = "ToggleInner"
+        ToggleInner.Parent = Toggle
+        ToggleInner.AnchorPoint = Vector2.new(0.5, 0.5)
+        ToggleInner.BackgroundColor3 = theme.Toggle_Inner_Color
+        ToggleInner.BorderSizePixel = 0
+        ToggleInner.Position = UDim2.new(0.096, 0, 0.5, 0)
 
-        strokecolor    = Color3.fromRGB(0, 0, 0);
+        ToggleText.Name = "ToggleText"
+        ToggleText.Parent = Toggle
+        ToggleText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        ToggleText.BackgroundTransparency = 1.000
+        ToggleText.Position = UDim2.new(0.149729788, 0, 0, 0)
+        ToggleText.Size = UDim2.new(0, 157, 0, 30)
+        ToggleText.Font = Enum.Font.SourceSansLight
+        ToggleText.Text = "   " .. text
+        ToggleText.TextColor3 = theme.Toggle_Text_Color
+        ToggleText.TextSize = 16.000
+        ToggleText.TextXAlignment = Enum.TextXAlignment.Left
 
-        textcolor      = Color3.fromRGB(255, 255, 255);
-        titletextcolor = Color3.fromRGB(255, 255, 255);
+        local Toggled = false
 
-        placeholdercolor = Color3.fromRGB(255, 255, 255);
-        titlestrokecolor = Color3.fromRGB(0, 0, 0);
-    }
+        Toggle.MouseButton1Click:Connect(
+            function()
+                Toggled = not Toggled
 
-    library.options = setmetatable({}, {__index = default})
-
-    spawn(function()
-        while true do
-            for i=0, 1, 1 / 300 do              
-                for _, obj in next, library.rainbowtable do
-                    obj.BackgroundColor3 = Color3.fromHSV(i, 1, 1);
+                if Toggled then
+                    TweenService:Create(
+                        ToggleInner,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 20, 0, 20)}
+                    ):Play()
+                elseif not Toggled then
+                    TweenService:Create(
+                        ToggleInner,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 0, 0, 0)}
+                    ):Play()
                 end
-                wait()
-            end;
-        end
-    end)
 
-    local function isreallypressed(bind, inp)
-        local key = bind
-        if typeof(key) == "Instance" then
-            if key.UserInputType == Enum.UserInputType.Keyboard and inp.KeyCode == key.KeyCode then
-                return true;
-            elseif tostring(key.UserInputType):find('MouseButton') and inp.UserInputType == key.UserInputType then
-                return true
+                callback(Toggled)
+            end
+        )
+
+			
+		local aa = {}
+
+		function aa:Set(bool)
+			if bool then
+				Toggled = true
+				TweenService:Create(
+                    ToggleInner,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, 20, 0, 20)}
+                ):Play()
+			else
+				Toggled = false
+				TweenService:Create(
+                    ToggleInner,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, 0, 0, 0)}
+                ):Play()
 			end
+		end
+
+        resize(30)
+
+		return aa;
+    end
+    function s:CreateSlider(text, minvalue, maxvalue, callback)
+        text = text or ""
+        callback = callback or function()
+            end
+        minvalue = minvalue or 0
+        maxvalue = maxvalue or 0
+        local Slider = Instance.new("TextButton")
+        local SliderText = Instance.new("TextLabel")
+        local Slider_2 = Instance.new("Frame")
+        local SliderInner = Instance.new("Frame")
+
+        Slider.Name = "Slider"
+        Slider.Parent = container
+        Slider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Slider.BackgroundTransparency = 1.000
+        Slider.Position = UDim2.new(0, 0, 0.410958916, 0)
+        Slider.Size = UDim2.new(0, 185, 0, 45)
+        Slider.Font = Enum.Font.SourceSans
+        Slider.Text = ""
+        Slider.TextColor3 = Color3.fromRGB(0, 0, 0)
+        Slider.TextSize = 14.000
+
+        SliderText.Name = "SliderText"
+        SliderText.Parent = Slider
+        SliderText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        SliderText.BackgroundTransparency = 1.000
+        SliderText.Position = UDim2.new(0.0362162739, 0, -0.0666666701, 0)
+        SliderText.Size = UDim2.new(0, 157, 0, 30)
+        SliderText.Font = Enum.Font.SourceSansLight
+        SliderText.Text = text .. " / " .. minvalue
+        SliderText.TextColor3 = theme.Slider_Text_Color
+        SliderText.TextSize = 16.000
+        SliderText.TextXAlignment = Enum.TextXAlignment.Left
+
+        Slider_2.Name = "Slider"
+        Slider_2.Parent = Slider
+        Slider_2.BackgroundColor3 = theme.Slider_Bar_Color
+        Slider_2.BorderColor3 = theme.Slider_Border_Color
+        Slider_2.Position = UDim2.new(0.0319999084, 0, 0.588888884, 0)
+        Slider_2.Size = UDim2.new(0, 172, 0, 9)
+        SliderInner.Name = "SliderInner"
+        SliderInner.Parent = Slider_2
+        SliderInner.BackgroundColor3 = theme.Slider_Inner_Color
+        SliderInner.BorderSizePixel = 0
+        SliderInner.Position = UDim2.new(0, 0, 0.055555556, 0)
+        SliderInner.Size = UDim2.new(0, 0, 0, 9)
+
+        local mouse = game.Players.LocalPlayer:GetMouse()
+        local uis = game:GetService("UserInputService")
+        local Value
+        local down = false
+
+        Slider.MouseButton1Down:Connect(function()
+            down = true
+            Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 172) * SliderInner.AbsoluteSize.X) +tonumber(minvalue)) or 0
+            SliderText.Text = text .. " / " .. Value
+			pcall(callback, Value)
+            SliderInner:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderInner.AbsolutePosition.X, 0, 172), 0, 9), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, .07)
+            while game:GetService("RunService").RenderStepped:wait() and down do
+                Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 172) * SliderInner.AbsoluteSize.X) +tonumber(minvalue)) or 0
+				SliderText.Text = text .. " / " .. Value                
+				pcall(callback, Value)
+                SliderInner:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderInner.AbsolutePosition.X, 0, 172), 0, 9), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, .07)
+            end
+        end)
+
+        uis.InputEnded:connect(function(key)
+			if key.UserInputType == Enum.UserInputType.MouseButton1 and down then
+	            down = false
+	            Value = math.floor((((tonumber(maxvalue) - tonumber(minvalue)) / 172) * SliderInner.AbsoluteSize.X) +tonumber(minvalue)) or 0
+	            SliderText.Text = text .. " / " .. Value
+				pcall(callback, Value)
+	            SliderInner:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderInner.AbsolutePosition.X, 0, 172), 0, 9), Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0.1)
+			end        
+		end)
+	
+		local ss = {}
+
+		function ss:Set(SliderAmount)
+			SliderAmount = tonumber(SliderAmount) or 0
+			SliderAmount = (((SliderAmount >= 0 and SliderAmount <= 100) and SliderAmount) / 100)
+			TweenService:Create(
+                SliderInner,
+                TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                {Size = UDim2.new(SliderAmount or 0, 0, 0, 9)}
+            ):Play()
+			local p = math.floor((SliderAmount or 0) * 100)
+			
+			local difference = maxvalue - minvalue
+			
+			local Value = math.floor(((difference / 100) * p) + minvalue)
+
+			SliderText.Text = text .. " / " .. Value
+			pcall(callback, Value)
+		end
+
+
+        resize(45)
+
+		return ss
+    end
+    function s:CreateDropDown(text, list, callback)
+		callback = callback or function() end
+        text = text or ""
+		list = list or {}
+        resize(30)
+        local IsDropped = false
+        local DropYSize = 0
+
+        local DropdownButton = Instance.new("TextButton")
+        local DropdownText = Instance.new("TextLabel")
+        local DropdownOpen = Instance.new("TextButton")
+        local UIListLayout_2 = Instance.new("UIListLayout")
+        local Dropdown = Instance.new("Frame")
+
+        Dropdown.Name = "Dropdown"
+        Dropdown.Parent = container
+        Dropdown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Dropdown.BackgroundTransparency = 1.000
+        Dropdown.ClipsDescendants = true
+        Dropdown.Position = UDim2.new(0, 0, 0.205479458, 0)
+        Dropdown.Size = UDim2.new(0, 184, 0, 30)
+
+        DropdownButton.Name = "DropdownButton"
+        DropdownButton.Parent = Dropdown
+        DropdownButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        DropdownButton.BackgroundTransparency = 1.000
+        DropdownButton.Size = UDim2.new(0, 185, 0, 30)
+        DropdownButton.Font = Enum.Font.SourceSans
+        DropdownButton.Text = ""
+        DropdownButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+        DropdownButton.TextSize = 17.000
+
+        DropdownText.Name = "DropdownText"
+        DropdownText.Parent = DropdownButton
+        DropdownText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        DropdownText.BackgroundTransparency = 1.000
+        DropdownText.Size = UDim2.new(0, 155, 0, 30)
+        DropdownText.Font = Enum.Font.SourceSansLight
+        DropdownText.Text = "  " .. text .. " / " .. ""
+        DropdownText.TextColor3 = theme.Dropdown_Text_Color
+        DropdownText.TextSize = 16.000
+        DropdownText.TextXAlignment = Enum.TextXAlignment.Left
+
+        DropdownOpen.Name = "DropdownOpen"
+        DropdownOpen.Parent = DropdownButton
+        DropdownOpen.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        DropdownOpen.BackgroundTransparency = 1.000
+        DropdownOpen.Position = UDim2.new(0.838, 0, 0, 0)
+        DropdownOpen.Size = UDim2.new(0, 30, 0, 30)
+        DropdownOpen.Font = Enum.Font.SourceSans
+        DropdownOpen.Text = "+"
+        DropdownOpen.TextColor3 = theme.Dropdown_Text_Color
+        DropdownOpen.TextSize = 14.000
+
+        UIListLayout_2.Parent = Dropdown
+        UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+
+        for i, v in next, list do
+            local Option1 = Instance.new("TextButton")
+            Option1.Name = "Option1"
+            Option1.Parent = Dropdown
+            Option1.BackgroundColor3 = theme.Dropdown_Option_Color
+            Option1.BorderColor3 = theme.Dropdown_Option_BorderColor
+            Option1.BorderSizePixel = theme.Dropdown_Option_BorderSize
+            Option1.BackgroundTransparency = 0
+            Option1.Position = UDim2.new(0, 0, 0.5, 0)
+            Option1.Size = UDim2.new(0, 184, 0, 30)
+            Option1.Font = Enum.Font.SourceSansLight
+            Option1.Text = v
+            Option1.TextColor3 = theme.Dropdown_Option_Text_Color
+            Option1.TextSize = 16.000
+            Option1.AutoButtonColor = false
+            DropYSize = DropYSize + 30
+
+            Option1.MouseButton1Click:Connect(
+                function()
+                    callback(v)
+                    DropdownText.Text = "  " .. text .. " / " .. v
+                    TweenService:Create(
+                        Dropdown,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 184, 0, 30)}
+                    ):Play()
+                    TweenService:Create(
+                        container,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 185, 0, BodyYSize)}
+                    ):Play()
+                    IsDropped = false
+                    DropdownOpen.Text = "+"
+                end
+            )
         end
-        if tostring(key):find'MouseButton' then
-            return key == inp.UserInputType
-        else
-            return key == inp.KeyCode
-        end
+        DropdownButton.MouseButton1Click:Connect(
+            function()
+                if IsDropped then
+                    IsDropped = false
+                    DropdownOpen.Text = "+"
+                    TweenService:Create(
+                        Dropdown,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 184, 0, 30)}
+                    ):Play()
+					
+                    TweenService:Create(
+                        container,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 185, 0, BodyYSize)}
+                    ):Play()
+                else
+                    IsDropped = true
+                    DropdownOpen.Text = "-"
+                    DropdownText.Text = "  " .. text .. " / "
+                    TweenService:Create(
+                        Dropdown,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 184, 0, DropYSize + 30)}
+                    ):Play()
+                    TweenService:Create(
+                        container,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 185, 0, BodyYSize + DropYSize + 1)}
+                    ):Play()
+                end
+            end
+        )
+
+        Tab.MouseButton1Click:Connect(
+            function()
+                IsDropped = false
+                DropdownOpen.Text = "+"
+                TweenService:Create(
+                    Dropdown,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, 184, 0, 30)}
+                ):Play()
+                TweenService:Create(
+                    container,
+                    TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                    {Size = UDim2.new(0, 185, 0, 0)}
+                ):Play()
+            end
+        )
+
+		--[[local ssss = {}
+
+		function ssss:Add(name)
+	            local Option1 = Dropdown:FindFirstChild("Option1"):Clone()
+	            Option1.Name = "Option1"
+	            Option1.Parent = Dropdown
+	            Option1.BackgroundColor3 = theme.Dropdown_Option_Color
+	            Option1.BorderColor3 = theme.Dropdown_Option_BorderColor
+	            Option1.BorderSizePixel = theme.Dropdown_Option_BorderSize
+	            Option1.BackgroundTransparency = 0
+	            Option1.Position = UDim2.new(0, 0, 0.5, 0)
+	            Option1.Size = UDim2.new(0, 184, 0, 30)
+	            Option1.Font = Enum.Font.SourceSansLight
+	            Option1.Text = name
+	            Option1.TextColor3 = theme.Dropdown_Option_Text_Color
+	            Option1.TextSize = 16.000
+	            Option1.AutoButtonColor = false
+	            DropYSize = DropYSize + 30
+	
+	            Option1.MouseButton1Click:Connect(
+	                function()
+	                    callback(name)
+	                    DropdownText.Text = "  " .. text .. " / " .. name
+	                    TweenService:Create(
+	                        Dropdown,
+	                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+	                        {Size = UDim2.new(0, 184, 0, 30)}
+	                    ):Play()
+	                    TweenService:Create(
+	                        container,
+	                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+	                        {Size = UDim2.new(0, 185, 0, BodyYSize)}
+	                    ):Play()
+	                    IsDropped = false
+	                    DropdownOpen.Text = "+"
+	                end
+	            )
+			if IsDropped then
+                    TweenService:Create(
+                        Dropdown,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 184, 0, DropYSize + 30)}
+                    ):Play()
+					TweenService:Create(
+                        container,
+                        TweenInfo.new(0.1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
+                        {Size = UDim2.new(0, 184, 0, BodyYSize + DropYSize)}
+                    ):Play()
+                end
+			local s2 = {}
+
+			function s2:Remove()
+				Option1:Destroy()
+			end
+		end
+
+		return ssss;]]
+    end
+    function s:CreateButton(text, callback)
+		text = text or ""
+        callback = callback or function()
+            end
+        local Button = Instance.new("TextButton")
+        Button.Name = text
+        Button.Parent = container
+        Button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Button.BackgroundTransparency = 1.000
+        Button.Position = UDim2.new(0, 0, 0.777777851, 0)
+        Button.Size = UDim2.new(0, 185, 0, 30)
+        Button.Font = Enum.Font.SourceSansLight
+        Button.Text = text
+        Button.TextColor3 = theme.Button_Text_Color
+        Button.TextSize = 16.000
+        Button.MouseButton1Down:Connect(
+            function()
+                Button.TextSize = 14
+            end
+        )
+        Button.MouseButton1Up:Connect(
+            function()
+                pcall(callback)
+                Button.TextSize = 16
+            end
+        )
+        resize(30)
     end
 
-    game:GetService("UserInputService").InputBegan:connect(function(input)
-        if (not library.binding) then
-            for idx, binds in next, library.binds do
-                local real_binding = binds.location[idx];
-                if real_binding and isreallypressed(real_binding, input) then
-                    binds.callback(input, true)
-                end
-            end
-        end
-	end)
-	game:GetService("UserInputService").InputEnded:connect(function(input)
-        if (not library.binding) then
-            for idx, binds in next, library.binds do
-                local real_binding = binds.location[idx];
-                if real_binding and isreallypressed(real_binding, input) then
-                    binds.callback(input, false)
-                end
-            end
-        end
-    end)
-end
+	function s:CreateTextBox(string, callback)
+		resize(30)
+		string = string or ""
+		callback = callback or function() end
+		local TextBox = Instance.new("TextBox")
+		local TextboxUnderline = Instance.new("Frame")
+		
+		TextBox.Parent = container
+		TextBox.BackgroundColor3 = theme.TextBox_Color
+		TextBox.BorderSizePixel = 0
+		TextBox.Position = UDim2.new(0, 0, 0.818181813, 0)
+		TextBox.Size = UDim2.new(0, 185, 0, 30)
+		TextBox.ClearTextOnFocus = false
+		TextBox.Font = Enum.Font.SourceSansLight
+		TextBox.PlaceholderColor3 = theme.TextBox_Text_Color
+		TextBox.PlaceholderText = string
+		TextBox.Text = ""
+		TextBox.TextColor3 = theme.TextBox_Text_Color
+		TextBox.TextSize = 15.000
+		TextBox.Focused:Connect(function()
+			TextboxUnderline:TweenSize(UDim2.new(0,185,0,2), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.1)
+		end)
+		TextBox.FocusLost:Connect(function(enterpressed)
+			if enterpressed then
+				TextboxUnderline:TweenSize(UDim2.new(0,0,0,2), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.1)
+				callback(TextBox.Text)
+				TextBox.Text = ""
+			else
+				TextboxUnderline:TweenSize(UDim2.new(0,0,0,2), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.1)
+			end
+		end)
+		
+		TextboxUnderline.Name = "TextboxUnderline"
+		TextboxUnderline.Parent = TextBox
+		TextboxUnderline.AnchorPoint = Vector2.new(0.5, 0.5)
+		TextboxUnderline.BackgroundColor3 = theme.TextBox_Underline_Color
+		TextboxUnderline.BorderSizePixel = 0
+		TextboxUnderline.Position = UDim2.new(0.50075686, 0, 0.966666639, 0)
+		TextboxUnderline.Size = UDim2.new(0, 0, 0, 2)
 
+		local TextBoxInfo = {}
+
+		function TextBoxInfo:Edit(text)
+			TextBox.Text = text
+		end
+
+		return TextBoxInfo
+	end
+    return s
+end
 return library
