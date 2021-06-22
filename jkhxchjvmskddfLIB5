@@ -21,11 +21,7 @@
 	end)()
 	local busy = false
 	local textlist = {
-		[1] = 'Search Something :)',
-		[2] = 'Got any question?',
-		[3] = 'Search...',
-		[4] = "Miss something?",
-		[5] = 'too much button?',
+		[1] = 'Search'
 	}
 	local function gettext(a)
 		return textlist[a] 
