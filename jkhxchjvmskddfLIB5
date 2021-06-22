@@ -1,5 +1,4 @@
-
-	local maincolor = Color3.fromRGB(0, 167, 214)
+	local maincolor = Color3.fromRGB(0, 177, 255)
 	local firstpage = '' 
 	local old = game.CoreGui:FindFirstChild('ScreenGui') 
 	if old  then 
