@@ -138,6 +138,20 @@ if not isgame() then
             if jc == 0 then
                 getgenv().repeating = true
                 print("Waiting for map...")
+                for _,Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
+                    local args = {
+                        [1] = "Elevators",
+                        [2] = "Enter",
+                        [3] = Elevators
+                }
+                RSRF:InvokeServer(unpack(args))
+                local args = {
+                    [1] = "Elevators",
+                    [2] = "Leave"
+            }
+            RSRF:InvokeServer(unpack(args))
+            wait()
+        end
             end
         end
     end
