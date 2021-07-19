@@ -114,8 +114,8 @@ if not isgame() then
                             getgenv().repeating = true
                             break
                         elseif sc.Text == "0/4" then
-                            print("Found better elevator, leaving...")
-                            wait(30)
+                            print("Something gone wrong, leaving...")
+                            wait(20)
                             print("Repeating join process - to be sure you joined...")
                             getgenv().repeating = true
                             break
