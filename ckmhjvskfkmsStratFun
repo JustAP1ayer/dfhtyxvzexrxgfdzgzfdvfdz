@@ -1,9 +1,5 @@
 repeat wait() until game:IsLoaded()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
-local scrip = {}
-local RS = game:WaitForChild('ReplicatedStorage')
-local RSRF = RS:WaitForChild("RemoteFunction")
-local RSRE = RS:WaitForChild("RemoteEvent")
 function game()
     if game.PlaceId == 5591597781 then
         return true
@@ -79,6 +75,10 @@ function conv(times,timem)
     seconds = seconds + cnv
     return seconds
 end
+local scrip = {}
+local RS = game:WaitForChild('ReplicatedStorage')
+local RSRF = RS:WaitForChild("RemoteFunction")
+local RSRE = RS:WaitForChild("RemoteEvent")
 function scrip:Map(map,antimulti)
 if not game() then
     getgenv().repeating = true
