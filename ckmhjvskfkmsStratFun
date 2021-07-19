@@ -59,9 +59,9 @@ function utility:skip()
 end
 function utility:game()
     if game.PlaceId == 5591597781 then
-        return false
-    else
         return true
+    else
+        return false
     end
 end
 function utility:conv(times,timem)
