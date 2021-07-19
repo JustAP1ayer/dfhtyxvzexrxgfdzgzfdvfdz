@@ -145,6 +145,7 @@ if not isgame() then
                         [3] = Elevators
                 }
                 RSRF:InvokeServer(unpack(args))
+                wait()
                 local args = {
                     [1] = "Elevators",
                     [2] = "Leave"
