@@ -51,7 +51,7 @@ function upgrade(troop)
     end
 end
 function EquipTroop(troop)
-    if not game() then
+    if not isgame() then
     local args = {
         [1] = "Inventory",
         [2] = "Execute",
