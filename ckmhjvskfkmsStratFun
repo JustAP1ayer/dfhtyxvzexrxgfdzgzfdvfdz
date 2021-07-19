@@ -1,6 +1,10 @@
 repeat wait() until game:IsLoaded()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
-function game()
+local scrip = {}
+local RS = game:WaitForChild('ReplicatedStorage')
+local RSRF = RS:WaitForChild("RemoteFunction")
+local RSRE = RS:WaitForChild("RemoteEvent")
+function isgame()
     if game.PlaceId == 5591597781 then
         return true
     else
@@ -75,12 +79,8 @@ function conv(times,timem)
     seconds = seconds + cnv
     return seconds
 end
-local scrip = {}
-local RS = game:WaitForChild('ReplicatedStorage')
-local RSRF = RS:WaitForChild("RemoteFunction")
-local RSRE = RS:WaitForChild("RemoteEvent")
 function scrip:Map(map,antimulti)
-if not game() then
+if not isgame() then
     getgenv().repeating = true
     while wait(1) do
         if getgenv().repeating then
@@ -144,13 +144,13 @@ if not game() then
 end
 end
 function scrip:Mode(mode)
-if game() then
+if isgame() then
     wait(2)
     RSRF:InvokeServer('Difficulty', 'Vote', mode)
 end
 end
 function scrip:Loadout(t1,t2,t3,t4,t5)
-    if not game() then
+    if not isgame() then
         EquipTroop(t1)
         EquipTroop(t2)
         EquipTroop(t3)
@@ -161,7 +161,7 @@ end
 function scrip:Place(troop,pos,wave,timem,times)
     spawn(function()
     seconds = conv(times,timem)
-    if game() then
+    if isgame() then
         repeat wait() until RS.State.Wave.Value == wave
         repeat wait() until RS.State.Timer.Time.Value == seconds
         place(troop,pos)
@@ -171,25 +171,31 @@ end
 function scrip:Upgrade(id,wave,timem,times)
     spawn(function()
     seconds = conv(times,timem)
+    if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
     upgrade(id)
+    end
     end)
 end
 function scrip:Sell(id,wave,timem,times)
     spawn(function()
     seconds = conv(times,timem)
+    if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
     sell(id)
+    end
     end)
 end
 function scrip:Skip(wave,timem,times)
     spawn(function()
     seconds = conv(times,timem)
+    if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
     skip()
+    end
     end)
 end
 return scrip
