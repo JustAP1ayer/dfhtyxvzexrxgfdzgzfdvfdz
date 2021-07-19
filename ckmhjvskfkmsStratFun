@@ -154,7 +154,7 @@ function scrip:Place(troop,pos,wave,timem,times)
     if game() then
         repeat wait() until RS.State.Wave.Value == wave
         repeat wait() until RS.State.Timer.Time.Value == seconds
-        place(troop,pos)
+        utility:place(troop,pos)
     end
     end)
 end
@@ -163,7 +163,7 @@ function scrip:Upgrade(id,wave,timem,times)
     seconds = utility:conv(times,timem)
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
-    upgrade(id)
+    utility:upgrade(id)
     end)
 end
 function scrip:Sell(id,wave,timem,times)
@@ -171,7 +171,7 @@ function scrip:Sell(id,wave,timem,times)
     seconds = utility:conv(times,timem)
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
-    sell(id)
+    utility:sell(id)
     end)
 end
 function scrip:Skip(wave,timem,times)
@@ -179,7 +179,7 @@ function scrip:Skip(wave,timem,times)
     seconds = utility:conv(times,timem)
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
-    skip()
+    utility:skip()
     end)
 end
 return scrip
