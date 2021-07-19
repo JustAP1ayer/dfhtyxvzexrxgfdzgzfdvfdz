@@ -183,7 +183,7 @@ function scrip:Sell(id,wave,timem,times)
     local seconds = conv(times,timem)
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.Sta te.Timer.Time.Value == seconds
+    repeat wait() until RS.State.Timer.Time.Value == seconds
     sell(id)
     end
     end)
