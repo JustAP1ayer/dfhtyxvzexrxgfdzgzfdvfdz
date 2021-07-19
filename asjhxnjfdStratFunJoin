@@ -1,3 +1,6 @@
+local RS = game:WaitForChild('ReplicatedStorage')
+local RSRF = RS:WaitForChild("RemoteFunction")
+local RSRE = RS:WaitForChild("RemoteEvent")
 function EquipTroop(troop)
     if not isgame() then
     local args = {
@@ -36,6 +39,19 @@ else
                             }
                             RSRF:InvokeServer(unpack(args))
                             print("Joined elavator...")
+                            for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Troops:GetChildren()) do
+                            local args = {
+                                [1] = "Inventory",
+                                [2] = "Execute",
+                                [3] = "Troops",
+                                [4] = "Remove",
+                                [5] = {
+                                    ["Name"] = v.Name
+                                }
+                            }
+                            game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
+                            end
+                        wait()
                         for c = 1,5 do
                             EquipTroop(v[2][c])
                         end
