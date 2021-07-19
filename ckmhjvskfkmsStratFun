@@ -11,16 +11,16 @@ function isgame()
         return false
     end
 end
-function place(troop,posx,posy,posz)
+function place(troop,pos1,pos2,pos3)
+    local pos = (pos1..","..pos2..","..pos3)
     if isgame() then
-    local pose = posx..","..posy..","..posz
     local args = {
         [1] = "Troops",
         [2] = "Place",
         [3] = troop,
         [4] = {
             ["Rotation"] = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1),
-            ["Position"] = pose,
+            ["Position"] = pos,
         }
     }
     RSRF:InvokeServer(unpack(args))
