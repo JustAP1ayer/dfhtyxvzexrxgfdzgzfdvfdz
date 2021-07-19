@@ -50,6 +50,7 @@ else
                                 }
                             }
                             game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
+                            wait()
                             end
                         wait()
                         for c = 1,5 do
