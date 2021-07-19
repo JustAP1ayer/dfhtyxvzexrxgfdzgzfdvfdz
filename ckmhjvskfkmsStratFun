@@ -4,7 +4,15 @@ local scrip = {}
 local RS = game:WaitForChild('ReplicatedStorage')
 local RSRF = RS:WaitForChild("RemoteFunction")
 local RSRE = RS:WaitForChild("RemoteEvent")
+function game()
+    if game.PlaceId == 5591597781 then
+        return true
+    else
+        return false
+    end
+end
 function place(troop,pos)
+    if game() then
     local args = {
         [1] = "Troops",
         [2] = "Place",
@@ -15,8 +23,10 @@ function place(troop,pos)
         }
     }
     RSRF:InvokeServer(unpack(args))
+    end
 end
 function sell(troop)
+    if game() then
     local args = {
         [1] = "Troops",
         [2] = "Sell",
@@ -25,8 +35,10 @@ function sell(troop)
         }
     }
     RSRF:InvokeServer(unpack(args))
+    end
 end
 function upgrade(troop)
+    if game() then
     local args = {
         [1] = "Troops",
         [2] = "Upgrade",
@@ -36,8 +48,10 @@ function upgrade(troop)
         }
     }
     RSRF:InvokeServer(unpack(args))
+    end
 end
 function EquipTroop(troop)
+    if not game() then
     local args = {
         [1] = "Inventory",
         [2] = "Execute",
@@ -49,18 +63,14 @@ function EquipTroop(troop)
     }
     RSRE:FireServer(unpack(args))
     end
+    end
 function skip()
+    if game() then
     local args = {
         [1] = "Waves",
         [2] = "Skip"
     }
     RSRF:InvokeServer(unpack(args))
-end
-function game()
-    if game.PlaceId == 5591597781 then
-        return true
-    else
-        return false
     end
 end
 function conv(times,timem)
