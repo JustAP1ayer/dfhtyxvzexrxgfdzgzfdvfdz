@@ -19,7 +19,7 @@ function place(troop,posx,posy,posz)
         [3] = troop,
         [4] = {
             ["Rotation"] = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1),
-            ["Position"] = posx,posy,posz
+            ["Position"] = posx..","..posy..","..posz
         }
     }
     RSRF:InvokeServer(unpack(args))
