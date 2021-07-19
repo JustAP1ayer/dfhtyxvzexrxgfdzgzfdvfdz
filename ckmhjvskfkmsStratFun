@@ -12,7 +12,7 @@ function isgame()
     end
 end
 function place(troop,pos)
-    if game() then
+    if isgame() then
     local args = {
         [1] = "Troops",
         [2] = "Place",
@@ -26,7 +26,7 @@ function place(troop,pos)
     end
 end
 function sell(troop)
-    if game() then
+    if isgame() then
     local args = {
         [1] = "Troops",
         [2] = "Sell",
@@ -38,7 +38,7 @@ function sell(troop)
     end
 end
 function upgrade(troop)
-    if game() then
+    if isgame() then
     local args = {
         [1] = "Troops",
         [2] = "Upgrade",
@@ -65,7 +65,7 @@ function EquipTroop(troop)
     end
     end
 function skip()
-    if game() then
+    if isgame() then
     local args = {
         [1] = "Waves",
         [2] = "Skip"
