@@ -158,32 +158,44 @@ function scrip:Loadout(t1,t2,t3,t4,t5)
         EquipTroop(t5)
     end
 end
-function scrip:Place(troop,posx,posy,posz,wave,timem,times)
+function scrip:Place(troop,posx,posy,posz,wave,timem,times,inbetween)
     spawn(function()
     local seconds = conv(times,timem)
     if isgame() then
         repeat wait() until RS.State.Wave.Value == wave
         repeat wait() until RS.State.Timer.Time.Value == seconds
+        if inbetween then
+             wait(1.5)
+            repeat wait() until RS.State.Timer.Time.Value == times
+        end
         place(troop,posx,posy,posz)
     end
     end)
 end
-function scrip:Upgrade(id,wave,timem,times)
+function scrip:Upgrade(id,wave,timem,times,inbetween)
     spawn(function()
     local seconds = conv(times,timem)
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
+    if inbetween then
+        wait(1.5)
+        repeat wait() until RS.State.Timer.Time.Value == times
+    end
     upgrade(id)
     end
     end)
 end
-function scrip:Sell(id,wave,timem,times)
+function scrip:Sell(id,wave,timem,times,inbetween)
     spawn(function()
     local seconds = conv(times,timem)
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
     repeat wait() until RS.State.Timer.Time.Value == seconds
+    if inbetween then
+        wait(1.5)
+        repeat wait() until RS.State.Timer.Time.Value == times
+    end
     sell(id)
     end
     end)
