@@ -160,12 +160,11 @@ function scrip:Loadout(t1,t2,t3,t4,t5)
 end
 function scrip:Place(troop,posx,posy,posz,wave,timem,times,inbetween)
     spawn(function()
-    local seconds = conv(times,timem)
     if isgame() then
         repeat wait() until RS.State.Wave.Value == wave
-        repeat wait() until RS.State.Timer.Time.Value == seconds
+        repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
         if inbetween then
-             wait(1.5)
+            wait(1.5)
             repeat wait() until RS.State.Timer.Time.Value == times
         end
         place(troop,posx,posy,posz)
@@ -174,10 +173,9 @@ function scrip:Place(troop,posx,posy,posz,wave,timem,times,inbetween)
 end
 function scrip:Upgrade(id,wave,timem,times,inbetween)
     spawn(function()
-    local seconds = conv(times,timem)
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == seconds
+    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
     if inbetween then
         wait(1.5)
         repeat wait() until RS.State.Timer.Time.Value == times
@@ -188,10 +186,9 @@ function scrip:Upgrade(id,wave,timem,times,inbetween)
 end
 function scrip:Sell(id,wave,timem,times,inbetween)
     spawn(function()
-    local seconds = conv(times,timem)
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == seconds
+    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
     if inbetween then
         wait(1.5)
         repeat wait() until RS.State.Timer.Time.Value == times
@@ -202,10 +199,9 @@ function scrip:Sell(id,wave,timem,times,inbetween)
 end
 function scrip:Skip(wave,timem,times)
     spawn(function()
-    local seconds = conv(times,timem)
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == seconds
+    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
     skip()
     end
     end)
