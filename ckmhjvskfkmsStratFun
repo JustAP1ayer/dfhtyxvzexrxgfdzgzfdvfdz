@@ -92,6 +92,9 @@ if not isgame() then
                         local sc = Elevators.Screen.SurfaceGui.Status.Players
                         local mp = Elevators.State.Map.Title
                         local rq = require(Elevators.Settings).Type
+                        if type == nil then
+                            type = "Survival"
+                        end
                         if mp.Value == map and rq == type then
                         if sc.Text == "0/4" or sc.Text == "0/3" then
                             jc = jc + 1
