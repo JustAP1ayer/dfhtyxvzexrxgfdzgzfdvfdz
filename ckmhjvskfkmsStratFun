@@ -47,7 +47,7 @@ function upgrade(troop)
         [2] = "Upgrade",
         [3] = "Set",
         [4] = {
-            ["Troop"] = game.Workspace.Towers[tostring(troop)],
+            ["Troop"] = game.Workspace.Towers:WaitForChild(tostring(troop)),
         }
     }
     local antig = game.Workspace.Towers[tostring(troop)].Upgrade.Value + 1
