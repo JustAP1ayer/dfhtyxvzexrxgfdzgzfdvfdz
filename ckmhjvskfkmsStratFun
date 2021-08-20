@@ -1,3 +1,4 @@
+--Please don't edit code without Money Maker permission :>
 repeat wait() until game:IsLoaded()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
 local scrip = {}
@@ -49,7 +50,10 @@ function upgrade(troop)
             ["Troop"] = game.Workspace.Towers[tostring(troop)],
         }
     }
+    local antig = game.Workspace.Towers[tostring(troop)].Upgrade.Value + 1
+    repeat
     RSRF:InvokeServer(unpack(args))
+    until game.Workspace.Towers[tostring(troop)].Upgrade.Value == antig
     end
 end
 function EquipTroop(troop)
