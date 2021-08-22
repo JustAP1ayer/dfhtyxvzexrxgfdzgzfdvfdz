@@ -12,6 +12,12 @@ function isgame()
         return false
     end
 end
+cc = 0
+if isgame() then
+game:GetService("Workspace").Towers.ChildAdded:Connect(function()
+cc = cc + 1
+end)
+end
 function place(troop,pos1,pos2,pos3)
     if isgame() then
     local args = {
@@ -23,7 +29,7 @@ function place(troop,pos1,pos2,pos3)
             ["Position"] = Vector3.new(pos1,pos2,pos3),
         }
     }
-    local check = getgenv().cc + 1
+    local check = cc + 1
     repeat
     RSRF:InvokeServer(unpack(args))
     wait()
