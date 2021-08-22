@@ -23,8 +23,9 @@ function place(troop,pos1,pos2,pos3)
             ["Position"] = Vector3.new(pos1,pos2,pos3),
         }
     }
-    for c = 1,5 do
+    for c = 1,10 do
     RSRF:InvokeServer(unpack(args))
+    wait()
     end
     end
 end
