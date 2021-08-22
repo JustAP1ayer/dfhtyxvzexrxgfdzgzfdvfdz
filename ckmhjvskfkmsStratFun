@@ -26,6 +26,7 @@ function place(troop,pos1,pos2,pos3)
     local check = getgenv().cc + 1
     repeat
     RSRF:InvokeServer(unpack(args))
+    wait()
     until game.Workspace.Towers:FindFirstChild(check)
     end
 end
