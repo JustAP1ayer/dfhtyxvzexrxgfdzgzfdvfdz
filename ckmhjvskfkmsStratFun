@@ -12,10 +12,10 @@ function isgame()
         return false
     end
 end
-cc = 0
+getgenv().count = 0
 if isgame() then
 game:GetService("Workspace").Towers.ChildAdded:Connect(function()
-cc = cc + 1
+getgenv().count = getgenv().count + 1
 end)
 end
 function place(troop,pos1,pos2,pos3)
@@ -29,7 +29,7 @@ function place(troop,pos1,pos2,pos3)
             ["Position"] = Vector3.new(pos1,pos2,pos3),
         }
     }
-    local check = cc + 1
+    local check = getgenv().count + 1
     repeat
     RSRF:InvokeServer(unpack(args))
     wait()
