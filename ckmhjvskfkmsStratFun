@@ -23,10 +23,10 @@ function place(troop,pos1,pos2,pos3)
             ["Position"] = Vector3.new(pos1,pos2,pos3),
         }
     }
-    for c = 1,10 do
+    local check = getgenv().cc + 1
+    repeat
     RSRF:InvokeServer(unpack(args))
-    wait()
-    end
+    until game.Workspace.Towers:FindFirstChild(check)
     end
 end
 function sell(troop)
