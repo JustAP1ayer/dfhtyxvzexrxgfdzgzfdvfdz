@@ -50,20 +50,19 @@ function sell(troop)
 end
 function upgrade(troop)
     if isgame() then
-    local theTroop = game.Workspace.Towers:GetChildren()[troop]
     local args = {
         [1] = "Troops",
         [2] = "Upgrade",
         [3] = "Set",
         [4] = {
-            ["Troop"] = theTroop,
+            ["Troop"] = game.Workspace.Towers:WaitForChild(tostring(troop)),
         }
     }
-    local level = theTroop.Upgrade.Value + 1
+    local antig = game.Workspace.Towers[tostring(troop)].Upgrade.Value + 1
     repeat
     RSRF:InvokeServer(unpack(args))
     wait(0.5)
-    until theTroop.Upgrade.Value == level
+    until game.Workspace.Towers[tostring(troop)].Upgrade.Value == antig
     end
 end
 function EquipTroop(troop)
