@@ -29,7 +29,9 @@ if isgame() then
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
 end
 function place(troop,pos1,pos2,pos3)
+    print("Checking if in game (Troop "..troop..")")
     if isgame() then
+    print("Placing (Troop "..troop..")")
     local args = {
         [1] = "Troops",
         [2] = "Place",
@@ -40,6 +42,7 @@ function place(troop,pos1,pos2,pos3)
         }
     }
     RSRF:InvokeServer(unpack(args))
+    print("Placed (Troop "..troop..")")
     end
 end
 function sell(troop)
@@ -55,6 +58,7 @@ function sell(troop)
     end
 end
 function upgrade(troop)
+    print("Checking if in game (Troop "..troop..")")
     if isgame() then
     spawn(function()
     repeat wait() until game.Workspace.Towers:FindFirstChild(tostring(troop))
