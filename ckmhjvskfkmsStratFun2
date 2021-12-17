@@ -19,11 +19,14 @@ function isgame()
     end
 end
 if isgame() then
-    local partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + CFrame.new(0,20,0)
+    local partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,20,0)
     local part = Instance.new("Part")
     part.Transparency = 1
     part.Anchored = true
-
+    part.CanCollide = true
+    part.Parent = game.Workspace
+    part.CFrame = partpos
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
 end
 function place(troop,pos1,pos2,pos3)
     if isgame() then
@@ -36,11 +39,7 @@ function place(troop,pos1,pos2,pos3)
             ["Position"] = Vector3.new(pos1,pos2,pos3),
         }
     }
-	local placeCheck = nil
-    repeat
-    placeCheck = RSRF:InvokeServer(unpack(args))
-    wait()
-    until placeCheck
+    RSRF:InvokeServer(unpack(args))
     end
 end
 function sell(troop)
