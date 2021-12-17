@@ -18,6 +18,13 @@ function isgame()
         return false
     end
 end
+if isgame() then
+    local partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + CFrame.new(0,20,0)
+    local part = Instance.new("Part")
+    part.Transparency = 1
+    part.Anchored = true
+
+end
 function place(troop,pos1,pos2,pos3)
     if isgame() then
     local args = {
@@ -50,6 +57,8 @@ function sell(troop)
 end
 function upgrade(troop)
     if isgame() then
+    spawn(function()
+    repeat wait() until game.Workspace.Towers:FindFirstChild(tostring(troop))
     local args = {
         [1] = "Troops",
         [2] = "Upgrade",
@@ -58,11 +67,8 @@ function upgrade(troop)
             ["Troop"] = game.Workspace.Towers:WaitForChild(tostring(troop)),
         }
     }
-    local antig = game.Workspace.Towers[tostring(troop)].Upgrade.Value + 1
-    repeat
     RSRF:InvokeServer(unpack(args))
-    wait(0.5)
-    until game.Workspace.Towers[tostring(troop)].Upgrade.Value == antig
+    end)
     end
 end
 function EquipTroop(troop)
