@@ -114,7 +114,6 @@ if not isgame() then
         getgenv().repeating = false
         local jc = 0
         for _,Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
-                        getgenv().status = "Error"
                         local sc = Elevators.Screen.SurfaceGui.Status.Players
                         local mp = Elevators.State.Map.Title
                         local rq = require(Elevators.Settings).Type
