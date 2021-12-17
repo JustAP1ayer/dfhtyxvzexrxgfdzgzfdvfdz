@@ -189,6 +189,19 @@ end
 end
 function scrip:Loadout(t1,t2,t3,t4,t5)
     if not isgame() then
+        for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Troops:GetChildren()) do
+            local args = {
+                [1] = "Inventory",
+                [2] = "Execute",
+                [3] = "Troops",
+                [4] = "Remove",
+                [5] = {
+                    ["Name"] = v.Name
+                }
+            }
+            game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
+            wait()
+        end
         EquipTroop(t1)
         EquipTroop(t2)
         EquipTroop(t3)
