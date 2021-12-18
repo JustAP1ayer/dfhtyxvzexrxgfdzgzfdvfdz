@@ -19,6 +19,8 @@ function isgame()
     end
 end
 if isgame() then
+    spawn(function()
+    wait(5)
     local partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,20,0)
     local part = Instance.new("Part")
     part.Transparency = 1
@@ -27,6 +29,7 @@ if isgame() then
     part.Parent = game.Workspace
     part.CFrame = partpos
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
+    end)
 end
 function place(troop,pos1,pos2,pos3)
     print("Checking if in game (Troop "..troop..")")
