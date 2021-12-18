@@ -192,10 +192,12 @@ end
 end
 function scrip:Mode(mode)
 if isgame() then
+    spawn(function()
     for c = 1,10 do
         wait(2)
         RSRF:InvokeServer('Difficulty', 'Vote', mode)
     end
+    end)
 end
 end
 function scrip:Loadout(t1,t2,t3,t4,t5)
