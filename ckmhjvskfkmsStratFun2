@@ -20,6 +20,7 @@ function isgame()
 end
 if isgame() then
     spawn(function()
+        wait(3)
     for i,v in pairs(game:GetService("Lighting"):GetChildren()) do
         if v.Name ~= "Sky" then
             v:Remove()
