@@ -20,7 +20,13 @@ function isgame()
 end
 if isgame() then
     spawn(function()
-    wait(5)
+    for i,v in pairs(game:GetService("Lighting"):GetChildren()) do
+        if v.Name ~= "Sky" then
+            v:Remove()
+        end
+    end
+    game.Lighting.FogStart = 100000
+    game.Lighting.Brightness = 1
     local partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,20,0)
     local part = Instance.new("Part")
     part.Transparency = 1
