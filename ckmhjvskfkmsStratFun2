@@ -334,7 +334,7 @@ if not isgame() then
                             RSRF:InvokeServer(unpack(args))
                             print("Joined elavator...")
                             getgenv().status = "Joined"
-                        while wait(1) do
+                        while wait() do
                         if mp.Value == map then
                         if antimulti then
                         if (plrs.Value > 1) then
