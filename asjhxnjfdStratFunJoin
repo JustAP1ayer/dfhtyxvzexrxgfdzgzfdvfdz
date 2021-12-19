@@ -1,6 +1,13 @@
 local RS = game:WaitForChild('ReplicatedStorage')
 local RSRF = RS:WaitForChild("RemoteFunction")
 local RSRE = RS:WaitForChild("RemoteEvent")
+function isgame()
+    if game.PlaceId == 5591597781 then
+        return true
+    else
+        return false
+    end
+end
 function EquipTroop(troop)
     if not isgame() then
     local args = {
@@ -18,82 +25,88 @@ function EquipTroop(troop)
 if game.PlaceId == 5591597781 then
 getgenv().map = game:GetService("ReplicatedStorage").State.Map.Value
 else
-    getgenv().repeating = true
-    while wait(1) do
-        if getgenv().repeating then
-        getgenv().repeating = false
-        local jc = 0
-        for _,Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
-                        local sc = Elevators.Screen.SurfaceGui.Status.Players
-                        local mp = Elevators.State.Map.Title
-                        local rq = require(Elevators.Settings).Type
-                        for i,v in next,getgenv().maps do
-                        if mp.Value == v[1] then
-                        if sc.Text == "0/4" then
-                            jc = jc + 1
-                            print("Join attempt...")
-                            local args = {
-                                    [1] = "Elevators",
-                                    [2] = "Enter",
-                                    [3] = Elevators
-                            }
-                            RSRF:InvokeServer(unpack(args))
-                            print("Joined elavator...")
-                            for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Troops:GetChildren()) do
-                            local args = {
-                                [1] = "Inventory",
-                                [2] = "Execute",
-                                [3] = "Troops",
-                                [4] = "Remove",
-                                [5] = {
-                                    ["Name"] = v.Name
+    if not isgame() then
+        getgenv().repeating = true
+        while wait(1) do
+            if getgenv().repeating then
+            getgenv().repeating = false
+            local jc = 0
+            for _,Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
+                            local sc = Elevators.Screen.SurfaceGui.Status.Players
+                            local mp = Elevators.State.Map.Title
+                            local plrs = Elevators.State.Players
+                            if mp.Value == v[1] then
+                            if (plrs.Value <= 0) then
+                                jc = jc + 1
+                                print("Join attempt...")
+                                getgenv().status = "Joining..."
+                                local args = {
+                                        [1] = "Elevators",
+                                        [2] = "Enter",
+                                        [3] = Elevators
                                 }
-                            }
-                            game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
-                            wait()
+                                RSRF:InvokeServer(unpack(args))
+                                print("Joined elavator...")
+                                getgenv().status = "Joined"
+                                for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Troops:GetChildren()) do
+                                    local args = {
+                                        [1] = "Inventory",
+                                        [2] = "Execute",
+                                        [3] = "Troops",
+                                        [4] = "Remove",
+                                        [5] = {
+                                            ["Name"] = v.Name
+                                        }
+                                    }
+                                    game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
+                                    wait()
+                                    end
+                                    for c = 1,5 do
+                                        EquipTroop(v[2][c])
+                                    end
+                            while wait(1) do
+                            if mp.Value == v[1] then
+                            if true then
+                            if (plrs.Value > 1) then
+                                local args = {
+                                        [1] = "Elevators",
+                                        [2] = "Leave"
+                                }
+                                RSRF:InvokeServer(unpack(args))
+                                print("Someone joined, leaving elevator...")
+                                getgenv().status = "Someone joined..."
+                                getgenv().repeating = true
+                                break
+                            elseif (plrs.Value == 0) then
+                                print("Something gone wrong, leaving...")
+                                getgenv().status = "Error"
+                                wait(20)
+                                print("Repeating join process - to be sure you joined...")
+                                getgenv().status = "Repeating joining..."
+                                getgenv().repeating = true
+                                break
                             end
-                        wait()
-                        for c = 1,5 do
-                            EquipTroop(v[2][c])
-                        end
-                        while wait(1) do
-                        if mp.Value == v[1] then
-                        if antimulti then
-                        if sc.Text == "2/4" or sc.Text == "3/4" or sc.Text == "4/4" then
+                            end
+                            else
                             local args = {
-                                    [1] = "Elevators",
-                                    [2] = "Leave"
+                                [1] = "Elevators",
+                                [2] = "Leave"
                             }
                             RSRF:InvokeServer(unpack(args))
-                            print("Someone joined, leaving elevator...")
+                            print("Map changed while joining, leaving...")
+                            getgenv().status = "Map changed..."
                             getgenv().repeating = true
                             break
-                        elseif sc.Text == "0/4" then
-                            print("Something gone wrong, leaving...")
-                            wait(20)
-                            print("Repeating join process - to be sure you joined...")
-                            getgenv().repeating = true
-                            break
-                        end
-                        end
-                        else
-                        local args = {
-                            [1] = "Elevators",
-                            [2] = "Leave"
-                        }
-                        RSRF:InvokeServer(unpack(args))
-                        print("Map changed while joining, leaving...")
-                        getgenv().repeating = true
-                        break
-                        end
-                        end
+                            end
+                            end
                         end
                     end
                 end
-            end
-            if jc == 0 then
-                getgenv().repeating = true
-                print("Waiting for map...")
+                if jc == 0 then
+                    getgenv().repeating = true
+                    print("Waiting for map...")
+                    getgenv().status = "Waiting for map..."
+                end
             end
         end
     end
