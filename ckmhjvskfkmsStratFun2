@@ -377,6 +377,7 @@ if isgame() then
         wait(2)
         RSRF:InvokeServer('Difficulty', 'Vote', mode)
     end
+    wait(1)
     output("Selected Mode (Mode "..mode..")")
     end)
 end
