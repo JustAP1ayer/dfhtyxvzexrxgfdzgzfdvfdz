@@ -264,7 +264,6 @@ function upgrade(troop)
     end
 end
 function EquipTroop(troop)
-    if not isgame() then
     local args = {
         [1] = "Inventory",
         [2] = "Execute",
@@ -275,7 +274,6 @@ function EquipTroop(troop)
         }
     }
     RSRE:FireServer(unpack(args))
-    end
 end
 function skip()
     if isgame() then
