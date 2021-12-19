@@ -188,6 +188,7 @@ end
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 0
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
     while wait() do
+        pcall(function()
         for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
             repeat wait() until v:FindFirstChild("HumanoidRootPart")
             if v.HumanoidRootPart.CFrame.Y > -10 then
@@ -203,6 +204,7 @@ end
                 end
             end
         end
+        end)
         end
     end
     end)
