@@ -190,10 +190,12 @@ end
     while wait() do
         for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
             repeat wait() until v:FindFirstChild("HumanoidRootPart")
-            if v.HumanoidRootPart.CFrame.Y ~= -10 then
+            if v.HumanoidRootPart.CFrame.Y > -10 then
                 game.Workspace.Camera.CameraSubject = v.HumanoidRootPart
                 wait()
                 break
+            else
+                game.Workspace.Camera.CameraSubject = nil
             end
         end
         end
