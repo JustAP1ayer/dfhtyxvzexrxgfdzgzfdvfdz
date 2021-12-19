@@ -47,7 +47,8 @@ if isgame() then
     else
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
     end
-    local LoggerByBanbus = Instance.new("ScreenGui")
+if game.CoreGui:FindFirstChild("AutoStratsLogger") then game.CoreGui:FindFirstChild("AutoStratsLogger"):Remove() end
+local LoggerByBanbus = Instance.new("ScreenGui")
 local Main = Instance.new("Frame")
 local Glow = Instance.new("ImageLabel")
 local Top_Container = Instance.new("Frame")
@@ -419,19 +420,6 @@ function scrip:Loadout(t1,t2,t3,t4,t5)
     end
     else
     if isgame() then
-        for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Troops:GetChildren()) do
-            local args = {
-                [1] = "Inventory",
-                [2] = "Execute",
-                [3] = "Troops",
-                [4] = "Remove",
-                [5] = {
-                    ["Name"] = v.Name
-                }
-            }
-            game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
-            wait()
-        end
         EquipTroop(t1)
         EquipTroop(t2)
         EquipTroop(t3)
