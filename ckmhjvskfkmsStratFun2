@@ -47,6 +47,8 @@ if isgame() then
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
     end
     if getgenv().CameraSys == true then
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 0
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
     while wait() do
         for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
             if v.HumanoidRootPart.CFrame.Y ~= -10 then
