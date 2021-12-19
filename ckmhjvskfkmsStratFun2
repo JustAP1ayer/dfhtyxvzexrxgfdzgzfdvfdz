@@ -195,7 +195,12 @@ end
                 wait()
                 break
             else
-                game.Workspace.Camera.CameraSubject = nil
+                for _,c in pairs(game.Workspace.Towers:GetChildren()) do
+                repeat wait() until v:FindFirstChild("HumanoidRootPart")
+                game.Workspace.Camera.CameraSubject = v.HumanoidRootPart
+                wait()
+                break
+                end
             end
         end
         end
@@ -448,8 +453,8 @@ function scrip:Sell(id,wave,timem,times,inbetween)
         wait(1.5)
         repeat wait() until RS.State.Timer.Time.Value == times
     end
-    sell(id)
     output("Sold (Troop "..game.Workspace.Towers[tostring(id)].Type.Value.." With Number "..tostring(id)..")")
+    sell(id)
     end
     end)
 end
