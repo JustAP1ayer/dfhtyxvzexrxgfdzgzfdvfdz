@@ -68,11 +68,14 @@ function sell(troop)
     RSRF:InvokeServer(unpack(args))
     end
 end
+getgenv().Upgrading = false
 function upgrade(troop)
     print("Checking if in game (Troop "..troop..")")
     if isgame() then
     spawn(function()
     repeat wait() until game.Workspace.Towers:FindFirstChild(tostring(troop))
+    repeat wait() until getgenv().Upgrading == false
+    getgenv().Upgrading = true
     local args = {
         [1] = "Troops",
         [2] = "Upgrade",
@@ -82,6 +85,7 @@ function upgrade(troop)
         }
     }
     RSRF:InvokeServer(unpack(args))
+    getgenv().Upgrading = false
     end)
     end
 end
