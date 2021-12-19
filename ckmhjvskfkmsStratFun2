@@ -20,7 +20,7 @@ function isgame()
 end
 if isgame() then
     spawn(function()
-        wait(3)
+    wait(3)
     for i,v in pairs(game:GetService("Lighting"):GetChildren()) do
         if v.Name ~= "Sky" then
             v:Remove()
@@ -29,14 +29,34 @@ if isgame() then
     game.Lighting.FogStart = 10000000
     game.Lighting.FogEnd = 10000000
     game.Lighting.Brightness = 1
-    local partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,20,0)
+    local partpos
+    if getgenv().CameraSys == true then
+    partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,50,0)
+    else
+    partpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,20,0)
+    end
     local part = Instance.new("Part")
     part.Transparency = 1
     part.Anchored = true
     part.CanCollide = true
     part.Parent = game.Workspace
     part.CFrame = partpos
+    if getgenv().CameraSys == true then
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
+    else
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,55,0)
+    end
+    if getgenv().CameraSys == true then
+    while wait() do
+        for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
+            if v.HumanoidRootPart.CFrame.Y ~= -10 then
+                game.Workspace.Camera.CameraSubject = v.HumanoidRootPart
+                wait()
+                break
+            end
+        end
+        end
+    end
     end)
 end
 function place(troop,pos1,pos2,pos3)
