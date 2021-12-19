@@ -296,7 +296,7 @@ local args = {
     }
 }
 RSRF:InvokeServer(unpack(args))
-output("Use Ability (Troop "..game.Workspace.Towers[tostring(troop)].Type.Value.." With Number "..tostring(troop).." Ability "..aname..")")
+output("Used Ability (Troop "..game.Workspace.Towers[tostring(troop)].Type.Value.." With Number "..tostring(troop).." Ability "..aname..")")
 end
 end
 function scrip:Map(map,antimulti,type)
