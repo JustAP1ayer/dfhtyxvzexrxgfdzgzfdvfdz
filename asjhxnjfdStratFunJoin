@@ -21,7 +21,7 @@ else
                             local sc = Elevators.Screen.SurfaceGui.Status.Players
                             local mp = Elevators.State.Map.Title
                             local plrs = Elevators.State.Players
-                            if table.find(getgenv().maps,mp) then
+                            if table.find(getgenv().maps,mp) ~= nil then
                             if (plrs.Value <= 0) then
                                 jc = jc + 1
                                 print("Join attempt...")
@@ -48,7 +48,7 @@ else
                                     wait()
                                     end
                             while wait() do
-                            if table.find(getgenv().maps,mp) then
+                            if table.find(getgenv().maps,mp) ~= nil then
                             if true then
                             if (plrs.Value > 1) then
                                 local args = {

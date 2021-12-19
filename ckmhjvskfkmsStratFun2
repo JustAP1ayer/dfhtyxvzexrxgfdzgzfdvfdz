@@ -189,20 +189,21 @@ end
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
     while wait() do
         pcall(function()
+        local check = game:GetService("Workspace").Enemies:GetChildren()
+        if #check ~= 0 then
         for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
             repeat wait() until v:FindFirstChild("HumanoidRootPart")
-            if v.HumanoidRootPart.CFrame.Y > -10 then
+            if v.HumanoidRootPart.CFrame.Y > -5 then
                 game.Workspace.Camera.CameraSubject = v.HumanoidRootPart
                 wait()
                 break
             else
-                for _,c in pairs(game.Workspace.Towers:GetChildren()) do
-                repeat wait() until v:FindFirstChild("HumanoidRootPart")
-                game.Workspace.Camera.CameraSubject = v.HumanoidRootPart
-                wait()
+                game.Workspace.Camera.CameraSubject = game:GetService("Workspace").Map.Paths["1"]["1"]
                 break
-                end
             end
+        end
+        else
+            game.Workspace.Camera.CameraSubject = game:GetService("Workspace").Map.Paths["1"]["1"]
         end
         end)
         end
