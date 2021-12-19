@@ -223,7 +223,12 @@ function place(troop,pos1,pos2,pos3)
             ["Position"] = Vector3.new(pos1,pos2,pos3),
         }
     }
-    RSRF:InvokeServer(unpack(args))
+    local placeCheck
+    repeat
+    placeCheck = RSRF:InvokeServer(unpack(args))
+    wait()
+    until placeCheck
+    end
     print("Placed (Troop "..troop..")")
     output("Placed (Troop "..troop..")")
     end
