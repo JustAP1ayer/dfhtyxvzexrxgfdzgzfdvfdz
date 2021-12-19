@@ -21,6 +21,7 @@ else
                             local sc = Elevators.Screen.SurfaceGui.Status.Players
                             local mp = Elevators.State.Map.Title
                             local plrs = Elevators.State.Players
+                            print(table.find(getgenv().maps,mp))
                             if table.find(getgenv().maps,mp) ~= nil then
                             if (plrs.Value <= 0) then
                                 jc = jc + 1
