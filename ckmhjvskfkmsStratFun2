@@ -291,7 +291,7 @@ local args = {
     [2] = "Abilities",
     [3] = "Activate",
     [4] = {
-        ["Troop"] = game.Workspace.Tower[tostring(troop)],
+        ["Troop"] = game.Workspace.Towers[tostring(troop)],
         ["Name"] = aname,
     }
 }
