@@ -42,9 +42,9 @@ if isgame() then
     part.Parent = game.Workspace
     part.CFrame = partpos
     if getgenv().CameraSys == true then
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
-    else
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,55,0)
+    else
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,25,0)
     end
     if getgenv().CameraSys == true then
     while wait() do
