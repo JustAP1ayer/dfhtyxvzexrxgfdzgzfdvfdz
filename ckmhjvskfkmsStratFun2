@@ -162,11 +162,14 @@ local function positioning()
 	script.Parent.Draggable = true
 end
 positioning()
+local hours = os.date("*t")["hour"]
+local mins = os.date("*t")["min"]
+local sec = os.date("*t")["sec"]
 local prevOutputPos = -0.0073
 function output(msg)
 	local colour = Color3.fromRGB(255,255,255)
 	local o = Instance.new("TextLabel",Scroll)
- 	o.Text = msg
+ 	o.Text = "["..hours..":"..mins..":"..sec.."] "..msg
  	o.Size = UDim2.new(0.005,0,0.001,0)
  	o.Position = UDim2.new(0,0,.007 + prevOutputPos ,0)
  	o.Font = Enum.Font.SourceSansSemibold
