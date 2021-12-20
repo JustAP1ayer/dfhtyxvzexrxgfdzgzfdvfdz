@@ -400,6 +400,7 @@ end
 end
 function scrip:Loadout(t1,t2,t3,t4,t5)
     if getgenv().IsMultiStrat then
+        wait(1)
         if isgame() then
             EquipTroop(t1)
             EquipTroop(t2)
