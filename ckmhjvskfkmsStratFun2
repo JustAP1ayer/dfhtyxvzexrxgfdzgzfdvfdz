@@ -436,7 +436,7 @@ function scrip:Place(troop,posx,posy,posz,wave,timem,times,inbetween)
     if isgame() then
         print("Waiting for time (Troop "..troop..")")
         repeat wait() until RS.State.Wave.Value == wave
-        repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
+        repeat wait() until RS.State.Timer.Time.Value >'= conv(times,timem)
         if inbetween then
             wait(1.5)
             print("Placing inbetween (Troop "..troop..")")
