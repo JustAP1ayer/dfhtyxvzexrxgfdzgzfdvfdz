@@ -564,6 +564,7 @@ function scrip:AutoChain(id1,id2,id3,wave,timem,times)
     repeat wait() until game:GetService("Workspace").Towers:FindFirstChild(tostring(id1))
     repeat wait() until game:GetService("Workspace").Towers:FindFirstChild(tostring(id2))
     repeat wait() until game:GetService("Workspace").Towers:FindFirstChild(tostring(id3))
+    output("Activated AutoChain (Troops "..tostring(id1)..", "..tostring(id2)..", "..tostring(id3)..")")
     while wait() do
         if game:GetService("Workspace").Towers:FindFirstChild(tostring(id1)) then
         local args = {
@@ -632,6 +633,7 @@ function scrip:Target(id,wave,timem,times)
         }
     }
     RSRF:InvokeServer(unpack(args))
+    output("Changed Target (Troop "..game.Workspace.Towers[tostring(id)].Type.Value.." With Number "..tostring(id)..")")
     end
     end)
 end
