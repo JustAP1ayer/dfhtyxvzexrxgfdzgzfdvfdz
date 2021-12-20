@@ -121,7 +121,7 @@ local function drag()
 	local UIS = game:GetService("UserInputService")
 	function dragify(Frame)
 	    dragToggle = nil
-	    local dragSpeed = 0.25
+	    local dragSpeed = 0.5
 	    dragInput = nil
 	    dragStart = nil
 	    local dragPos = nil
