@@ -187,6 +187,8 @@ end
 spawn(function()
 local Toggled = false
 Toggled = not Toggled
+game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
+game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
 SprintKey = Enum.KeyCode.LeftShift
 localPlayer = game.Players.LocalPlayer
 Camera = game.Workspace.CurrentCamera
