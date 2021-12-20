@@ -436,7 +436,7 @@ function scrip:Place(troop,posx,posy,posz,wave,timem,times,inbetween)
     if isgame() then
         print("Waiting for time (Troop "..troop..")")
         repeat wait() until RS.State.Wave.Value == wave
-        repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
+        repeat wait() until RS.State.Timer.Time.Value >= conv(times,timem)
         if inbetween then
             wait(1.5)
             print("Placing inbetween (Troop "..troop..")")
@@ -451,7 +451,7 @@ function scrip:Upgrade(id,wave,timem,times,inbetween)
     spawn(function()
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
+    repeat wait() until RS.State.Timer.Time.Value >= conv(times,timem)
     if inbetween then
         wait(1.5)
         repeat wait() until RS.State.Timer.Time.Value == times
@@ -464,7 +464,7 @@ function scrip:Sell(id,wave,timem,times,inbetween)
     spawn(function()
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
+    repeat wait() until RS.State.Timer.Time.Value >= conv(times,timem)
     if inbetween then
         wait(1.5)
         repeat wait() until RS.State.Timer.Time.Value == times
@@ -478,7 +478,7 @@ function scrip:Skip(wave,timem,times)
     spawn(function()
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
+    repeat wait() until RS.State.Timer.Time.Value >= conv(times,timem)
     skip()
     end
     end)
@@ -487,7 +487,7 @@ function scrip:Ability(id,aname,wave,timem,times)
     spawn(function()
     if isgame() then
     repeat wait() until RS.State.Wave.Value == wave
-    repeat wait() until RS.State.Timer.Time.Value == conv(times,timem)
+    repeat wait() until RS.State.Timer.Time.Value >= conv(times,timem)
     ability(id,aname)
     end
     end)
