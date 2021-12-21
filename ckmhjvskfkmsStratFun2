@@ -1,6 +1,13 @@
 --Please don't edit code without Money Maker permission :>
 repeat wait() until game:IsLoaded()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
+repeat
+loadstring(game:HttpGet("https://banbus.cf/Scripts/IsAutoStratMain"))()
+getgenv().status = "Script in maintance, waiting..."
+wait(1)
+until
+getgenv().StratMaintance == false
+getgenv().status = "Loading"
 getgenv().count = 0
 if game.PlaceId == 5591597781 then
 game:GetService("Workspace").Towers.ChildAdded:Connect(function(v)
