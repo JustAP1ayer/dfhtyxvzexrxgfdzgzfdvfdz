@@ -469,10 +469,15 @@ function scrip:Loadout(t1,t2,t3,t4,t5)
         wait(1)
         if isgame() then
             EquipTroop(t1)
+            getgenv().TroopNameNEW = t1
             EquipTroop(t2)
+            getgenv().TroopName2NEW = t2
             EquipTroop(t3)
+            getgenv().TroopName3NEW = t3
             EquipTroop(t4)
+            getgenv().TroopName4NEW = t4
             EquipTroop(t5)
+            getgenv().TroopName5NEW = t5
         end
     else
         if not isgame() then
@@ -490,10 +495,15 @@ function scrip:Loadout(t1,t2,t3,t4,t5)
                 wait()
             end
             EquipTroop(t1)
+            getgenv().TroopNameNEW = t1
             EquipTroop(t2)
+            getgenv().TroopName2NEW = t2
             EquipTroop(t3)
+            getgenv().TroopName3NEW = t3
             EquipTroop(t4)
+            getgenv().TroopName4NEW = t4
             EquipTroop(t5)
+            getgenv().TroopName5NEW = t5
         end
     end
 end
