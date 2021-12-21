@@ -5,8 +5,8 @@ repeat
 loadstring(game:HttpGet("https://banbus.cf/Scripts/IsAutoStratMain"))()
 getgenv().status = "Script in maintance, waiting..."
 wait(1)
-until
-getgenv().StratMaintance == false
+until getgenv().StratMaintance == false
+
 getgenv().status = "Loading"
 getgenv().count = 0
 if game.PlaceId == 5591597781 then
