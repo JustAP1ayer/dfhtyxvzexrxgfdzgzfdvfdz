@@ -457,6 +457,10 @@ if not isgame() then
     end
 end
 end
+if not isfolder("TDS_AutoStart") and not isfile("TDS_AutoStart/Webhook (Logs).txt") then
+    makefolder("TDS_AutoStrat")
+    writefile("TDS_AutoStart/Webhook (Logs).txt", "WEBHOOK HERE")
+end
 function scrip:Mode(mode)
 if isgame() then
     spawn(function()
