@@ -1,7 +1,8 @@
 --Please don't edit code without Money Maker permission :>
 repeat wait() until game:IsLoaded()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
-repeat
+
+repeat wait()
 loadstring(game:HttpGet("https://banbus.cf/Scripts/IsAutoStratMain"))()
 getgenv().status = "Script in maintance, waiting..."
 wait(1)
