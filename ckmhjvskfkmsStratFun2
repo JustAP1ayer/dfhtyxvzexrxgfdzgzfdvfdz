@@ -1,6 +1,5 @@
 --Please don't edit code without Money Maker permission :>
 repeat wait() until game:IsLoaded()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
 
 repeat wait()
 loadstring(game:HttpGet("https://banbus.cf/Scripts/IsAutoStratMain"))()
@@ -650,4 +649,5 @@ function scrip:Target(id,wave,timem,times)
     end
     end)
 end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
 return scrip
