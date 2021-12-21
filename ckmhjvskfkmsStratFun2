@@ -27,6 +27,22 @@ function isgame()
         return false
     end
 end
+if isgame() and getgenv().PotatoPC then
+    spawn(function()
+    wait(3)
+    for i,v in pairs(game.Workspace.Map:GetChildren()) do
+        if v.Name ~= "Paths" then
+            v:Remove()
+        end
+    end
+    local ter = game.Workspace.Terrain
+    ter.Transparency = 0
+    ter.WaterReflectance = 0
+    ter.WaterTransparency = 0
+    ter.WaterWaveSize = 0
+    ter.WaterWavespeed = 0
+    end)
+end
 if isgame() then
     spawn(function()
     wait(3)
