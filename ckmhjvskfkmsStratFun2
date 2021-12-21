@@ -470,7 +470,6 @@ if isgame() then
 end
 end
 function scrip:Loadout(t1,t2,t3,t4,t5)
-    wait(1)
     getgenv().TroopNameNEW = t1
     getgenv().TroopName2NEW = t2
     getgenv().TroopName3NEW = t3
