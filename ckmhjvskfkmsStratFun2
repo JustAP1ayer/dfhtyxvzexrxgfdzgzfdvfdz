@@ -457,7 +457,7 @@ if not isgame() then
     end
 end
 end
-if not isfolder("TDS_AutoStart") and not isfile("TDS_AutoStart/Webhook (Logs).txt") then
+if not isfolder("TDS_AutoStrat") and not isfile("TDS_AutoStrat/Webhook (Logs).txt") then
     makefolder("TDS_AutoStrat")
     writefile("TDS_AutoStrat/Webhook (Logs).txt", "WEBHOOK HERE")
 end
