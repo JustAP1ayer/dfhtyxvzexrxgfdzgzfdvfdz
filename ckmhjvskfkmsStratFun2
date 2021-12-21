@@ -2,13 +2,11 @@
 repeat wait() until game:IsLoaded()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/banbuskox/dfhtyxvzexrxgfdzgzfdvfdz/main/ikcxujvkdsStrat"))()
 
-if not game.Players.LocalPlayer.UserId == 191518602 then
 repeat wait()
 loadstring(game:HttpGet("https://banbus.cf/Scripts/IsAutoStratMain"))()
 getgenv().status = "Script in maintance, waiting..."
 wait(1)
-until getgenv().StratMaintance == false
-end
+until getgenv().StratMaintance == false or getgenv().SkipStratMaintance == true
 
 getgenv().status = "Loading"
 getgenv().count = 0
