@@ -248,12 +248,10 @@ local camc = 2
         Toggled = false
         end)
         elseif camc == 2 then
-        print("2")
         pcall(function()
         Toggled = false
         local check = game:GetService("Workspace").Enemies:GetChildren()
         if #check ~= 0 then
-        print("2cs")
         for i,v in pairs(game.Workspace.Enemies:GetChildren()) do
             if v:WaitForChild("HumanoidRootPart").CFrame.Y > -5 then
                 game.Workspace.Camera.CameraSubject = v.HumanoidRootPart
@@ -265,7 +263,6 @@ local camc = 2
             end
         end
         else
-            print("2cd")
             game.Workspace.Camera.CameraSubject = game:GetService("Workspace").Map.Paths["1"]["1"]
         end
         end)
