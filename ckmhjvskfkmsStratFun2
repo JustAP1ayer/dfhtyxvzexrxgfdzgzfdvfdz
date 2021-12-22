@@ -43,7 +43,7 @@ if isgame() and getgenv().PotatoPC then
     ter.WaterReflectance = 0
     ter.WaterTransparency = 0
     ter.WaterWaveSize = 0
-    ter.WaterWavespeed = 0
+    ter.WaterWaveSpeed = 0
     end)
 end
 if isgame() then
