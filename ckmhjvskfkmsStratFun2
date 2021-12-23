@@ -430,6 +430,7 @@ if not isgame() then
                             print("Joined elavator...")
                             getgenv().status = "Joined"
                         while wait() do
+                        getgenv().status = "Joined ("..Elevators.State.Timer.Value.."s)"
                         if mp.Value == map then
                         if antimulti then
                         if (plrs.Value > 1) then
