@@ -447,10 +447,10 @@ if not isgame() then
                             break
                         elseif (plrs.Value == 0) then
                             print("Something gone wrong, leaving...")
-                            getgenv().status = "Error"
-                            wait(20)
-                            print("Repeating join process - to be sure you joined...")
-                            getgenv().status = "Repeating joining..."
+                            getgenv().status = "Error (Initializing safety protocols...)"
+                            wait(5)
+                            print("Repeating safety protocols...")
+                            getgenv().status = "Repeating safety protocols..."
                             getgenv().repeating = true
                             break
                         end
