@@ -190,6 +190,7 @@ local function positioning()
 end
 positioning()
 local prevOutputPos = -0.0073
+writefile("TDS_AutoStrat/LastLog.txt","--[START OF LOG]--")
 function output(msg)
     local hours = os.date("*t")["hour"]
     local mins = os.date("*t")["min"]
@@ -197,6 +198,7 @@ function output(msg)
 	local colour = Color3.fromRGB(255,255,255)
 	local o = Instance.new("TextLabel",Scroll)
  	o.Text = "["..hours..":"..mins..":"..sec.."] "..msg
+    appendfile("TDS_AutoStrat/LastLog.txt","\n["..hours..":"..mins..":"..sec.."] "..msg)
  	o.Size = UDim2.new(0.005,0,0.001,0)
  	o.Position = UDim2.new(0,0,.007 + prevOutputPos ,0)
  	o.Font = Enum.Font.SourceSansSemibold
