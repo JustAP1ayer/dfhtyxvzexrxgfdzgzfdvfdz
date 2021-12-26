@@ -30,6 +30,41 @@ function isgame()
         return false
     end
 end
+if not isgame() then
+local noti = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Prompt.Containers.Message.Notice
+local gui = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui
+noti.Message.Text = "We are sorry to annouce this to you, your account has been detected using one of the following cheats/scripts : AutoFarm, AutoStrat, Equipper, TDS Recorder. Your account has been reseted and you got disqualified from this event and every upcoming one."
+noti.Visible = true
+gui.Menu.Buttons.Achievements:Remove()
+for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Hotbar.Troops:GetDescendants()) do
+    if v.Name == "Hint" or v.Name == "Icon" or v.Name == "Label" then
+        v:Remove()
+    end
+end
+gui.Hotbar.Level.Label.Text = "Level 0 [0/100]"
+gui.Hotbar.Level.Bar:Remove()
+gui.Hotbar.Stats.Triumphs.Amount.Text = "0"
+gui.Hotbar.Stats.Wins.Amount.Text = "0"
+gui.Menu.Containers.Shop:Remove()
+for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Troops.Display:GetDescendants()) do
+    v:Remove()
+end
+for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Troops.Holder.Troops:GetDescendants()) do
+    v:Remove()
+end
+for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Emotes.Display:GetDescendants()) do
+    v:Remove()
+end
+for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Emotes.Holder:GetDescendants()) do
+    v:Remove()
+end
+for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Display:GetDescendants()) do
+    v:Remove()
+end
+for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Holder:GetDescendants()) do
+    v:Remove()
+end
+end
 if isgame() and getgenv().PotatoPC then
     spawn(function()
     wait(3)
