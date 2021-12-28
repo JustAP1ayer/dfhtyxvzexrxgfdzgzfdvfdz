@@ -69,7 +69,7 @@ end
 for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Holder:GetDescendants()) do
     v:Remove()
 end
-writefile("TDS_AutoStrat/Troll.txt","That thing with ban was fake and i made it to scare you, lol")
+writefile("TDS_AutoStrat/Troll.txt","ctnC+5tLWhjjJZccUxSTG1Y8WaoRp3TcI/tXsgvJEa5erWdWV831so8AbOHuMnvniwuEf20g5THpRBHF+7hW35fncbVvVu6kHQtOCHz+iPThUSoVGc/Q/LCJ7GADKJkQ")
 end
 end
 if isgame() and getgenv().PotatoPC then
@@ -525,6 +525,7 @@ if not isfolder("TDS_AutoStrat") and not isfile("TDS_AutoStrat/Webhook (Logs).tx
     makefolder("TDS_AutoStrat")
     writefile("TDS_AutoStrat/Webhook (Logs).txt", "WEBHOOK HERE")
 end
+writefile("??????????.txt","KxjhVghCJH")
 function scrip:Mode(mode)
 if isgame() then
     spawn(function()
