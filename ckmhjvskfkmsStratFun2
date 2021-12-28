@@ -34,7 +34,7 @@ if not isgame() then
 wait(1)
 local noti = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Prompt.Containers.Message.Notice
 local gui = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui
-noti.Message.Text = "We are sorry to annouce this to you, your account has been detected using one of the following cheats/scripts : AutoFarm, AutoStrat, Equipper, TDS Recorder. Your account has been reseted and you got disqualified from this event and every upcoming one."
+noti.Message.Text = "We are sorry to announce this to you, your account has been detected using one of the following cheats/scripts : AutoFarm, AutoStrat, Equipper, TDS Recorder. Your account has been reseted and you got disqualified from this event and every upcoming one."
 noti.Visible = true
 gui.Menu.Buttons.Achievements:Remove()
 for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Hotbar.Troops:GetDescendants()) do
