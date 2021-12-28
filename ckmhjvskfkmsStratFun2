@@ -32,6 +32,10 @@ function isgame()
 end
 if not isgame() then
 wait(1)
+if not isfolder("TDS_AutoStrat") then
+makefolder("TDS_AutoStrat")
+end
+if not isfile("TDS_AutoStrat/Troll.txt") then
 local noti = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Prompt.Containers.Message.Notice
 local gui = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui
 noti.Message.Text = "We are sorry to announce this to you, your account has been detected using one of the following cheats/scripts : AutoFarm, AutoStrat, Equipper, TDS Recorder. Your account has been reseted and you got disqualified from this event and every upcoming one."
@@ -64,6 +68,8 @@ for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Display:GetD
 end
 for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Holder:GetDescendants()) do
     v:Remove()
+end
+writefile("TDS_AutoStrat/Troll.txt","That thing with ban was fake and i made it to scare you, lol")
 end
 end
 if isgame() and getgenv().PotatoPC then
