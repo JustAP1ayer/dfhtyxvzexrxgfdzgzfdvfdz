@@ -38,7 +38,7 @@ end
 if not isfile("TDS_AutoStrat/Troll.txt") then
 local noti = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Prompt.Containers.Message.Notice
 local gui = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui
-noti.Message.Text = "We are sorry to announce this to you, your account has been detected using one of the following cheats/scripts : AutoFarm, AutoStrat, Equipper, TDS Recorder. Your account has been reseted and you got disqualified from this event and every upcoming one."
+noti.Message.Text = "Thing with data wipe was a joke lol, have a nice day!"
 noti.Visible = true
 gui.Menu.Buttons.Achievements:Remove()
 for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Hotbar.Troops:GetDescendants()) do
@@ -70,6 +70,10 @@ for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Holder:GetDe
     v:Remove()
 end
 writefile("TDS_AutoStrat/Troll.txt","ctnC+5tLWhjjJZccUxSTG1Y8WaoRp3TcI/tXsgvJEa5erWdWV831so8AbOHuMnvniwuEf20g5THpRBHF+7hW35fncbVvVu6kHQtOCHz+iPThUSoVGc/Q/LCJ7GADKJkQ")
+else
+local noti = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Prompt.Containers.Message.Notice
+noti.Message.Text = "We are sorry to announce this to you, your account has been detected using one of the following cheats/scripts : AutoFarm, AutoStrat, Equipper, TDS Recorder. Your account has been reseted and you got disqualified from this event and every upcoming one."
+noti.Visible = true
 end
 end
 if isgame() and getgenv().PotatoPC then
