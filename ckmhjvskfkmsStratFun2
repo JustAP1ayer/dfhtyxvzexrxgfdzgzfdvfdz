@@ -70,7 +70,7 @@ for i,v in pairs(gui.Menu.Containers.Inventory.Content.Pages.Crates.Holder:GetDe
     v:Remove()
 end
 writefile("TDS_AutoStrat/Troll.txt","ctnC+5tLWhjjJZccUxSTG8casrMsCITT/za/3ELcQSVzz/Wm0xpJ2Ksf11a/ZZkDcuZ4fLp3SCz23g2zeiAnVaygF1HK6IgZvZqibdDKAgqz20JoMIZhJ4OofcXh+hspdYxF2WAJXsd1Ixx9FXwOSg==")
-writefile("???????.txt","KxjhVghCJH")
+writefile("xdieee.txt","KxjhVghCJH")
 else
 local noti = game:GetService("Players").LocalPlayer.PlayerGui.LobbyGui.Prompt.Containers.Message.Notice
 noti.Message.Text = "Thing with data wipe was a joke lol, have a nice day!"
