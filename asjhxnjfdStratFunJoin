@@ -61,7 +61,7 @@ spawn(function()
                             }
                             RSRF:InvokeServer(unpack(args))
                             UnEquip()
-                            for i,v in next, getgenv().Maps[mp] do
+                            for i,v in next, getgenv().Maps[mp.Value] do
                                 EquipTroop(v)
                             end
                             print("Joined elavator...")
