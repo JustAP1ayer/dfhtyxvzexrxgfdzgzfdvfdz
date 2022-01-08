@@ -44,7 +44,7 @@ spawn(function()
                 for _, Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
                     local mp = Elevators.State.Map.Title
                     local plrs = Elevators.State.Players
-                    if getgenv().Loadout[mp] ~= nil then
+                    if getgenv().Maps[mp] ~= nil then
                         if (plrs.Value <= 0) then
                             jc = jc + 1
                             print("Join attempt...")
@@ -56,14 +56,14 @@ spawn(function()
                             }
                             RSRF:InvokeServer(unpack(args))
                             UnEquip()
-                            for i,v in next, getgenv().Loadout[mp] do
+                            for i,v in next, getgenv().Maps[mp] do
                                 EquipTroop(v)
                             end
                             print("Joined elavator...")
                             getgenv().status = "Joined"
                             while wait() do
                                 getgenv().status = "Joined ("..Elevators.State.Timer.Value.."s)"
-                                if getgenv().Loadout[mp] ~= nil then
+                                if getgenv().Maps[mp] ~= nil then
                                     if antimulti then
                                         if (plrs.Value > 1) then
                                             local args = {
