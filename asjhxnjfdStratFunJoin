@@ -41,12 +41,19 @@ spawn(function()
 				getgenv().timer = getgenv().timer + 1
 			end
 		end)
+        getgenv().BreakEvery = false
         getgenv().repeating = true
         while wait(1) do
+            if getgenv().BreakEvery then
+                break
+            end
             if getgenv().repeating then
                 getgenv().repeating = false
                 local jc = 0
                 for _, Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
+                    if getgenv().BreakEvery then
+                        break
+                    end
                     local mp = Elevators.State.Map.Title
                     local plrs = Elevators.State.Players
                     if getgenv().Maps[mp.Value] ~= nil then
@@ -67,14 +74,15 @@ spawn(function()
                             print("Joined elavator...")
                             getgenv().status = "Joined"
                             while wait() do
+                                if getgenv().BreakEvery then
+                                    break
+                                end
                                 getgenv().status = "Joined ("..Elevators.State.Timer.Value.."s)"
                                 if Elevators.State.Timer.Value == 0 then
                                     wait(1)
                                     if Elevators.State.Timer.Value == 0 then
                                         getgenv().status = "Teleporting..."
-                                        break
-                                        break
-                                        break
+                                        getgenv().BreakEvery
                                     end
                                 end
                                 if getgenv().Maps[mp.Value] ~= nil then
