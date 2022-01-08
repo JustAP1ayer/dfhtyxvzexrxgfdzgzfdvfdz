@@ -71,6 +71,7 @@ spawn(function()
                                 if Elevators.State.Timer.Value == 0 then
                                     wait(1)
                                     if Elevators.State.Timer.Value == 0 then
+                                        getgenv().status = "Teleporting..."
                                         break
                                         break
                                         break
