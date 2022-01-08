@@ -1,5 +1,4 @@
 spawn(function()
-    repeat wait() until getgenv().Loadout ~= nil
     local RS = game:WaitForChild('ReplicatedStorage')
     local RSRF = RS:WaitForChild("RemoteFunction")
     local RSRE = RS:WaitForChild("RemoteEvent")
