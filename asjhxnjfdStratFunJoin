@@ -35,6 +35,12 @@ spawn(function()
     if game.PlaceId == 5591597781 then
     getgenv().map = game:GetService("ReplicatedStorage").State.Map.Value
     else
+        spawn(function()
+			getgenv().timer = 0
+			while wait(1) do
+				getgenv().timer = getgenv().timer + 1
+			end
+		end)
         getgenv().repeating = true
         while wait(1) do
             if getgenv().repeating then
@@ -106,6 +112,28 @@ spawn(function()
                     getgenv().repeating = true
                     print("Waiting for map...")
                     getgenv().status = "Waiting for map..."
+                    if getgenv().timer >= 30
+					getgenv().status = "Force changing maps..."
+					getgenv().timer = 0
+					for i, v in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
+						local rq = require(v.Settings).Type
+						local plrs = v.State.Players
+						if rq == "Survival" and plrs.Value <= 0 then
+							local args = {
+								[1] = "Elevators",
+								[2] = "Enter",
+								[3] = v
+							}
+							RSRF:InvokeServer(unpack(args))
+							wait(0.6)
+							local args = {
+								[1] = "Elevators",
+								[2] = "Leave"
+							}
+							RSRF:InvokeServer(unpack(args))
+						end
+					end
+				end
                 end
             end
         end
