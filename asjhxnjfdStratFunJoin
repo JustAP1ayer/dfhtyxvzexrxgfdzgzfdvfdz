@@ -82,7 +82,7 @@ spawn(function()
                                     wait(1)
                                     if Elevators.State.Timer.Value == 0 then
                                         getgenv().status = "Teleporting..."
-                                        getgenv().BreakEvery
+                                        getgenv().BreakEvery = true
                                     end
                                 end
                                 if getgenv().Maps[mp.Value] ~= nil then
