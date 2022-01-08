@@ -43,7 +43,7 @@ spawn(function()
                 for _, Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
                     local mp = Elevators.State.Map.Title
                     local plrs = Elevators.State.Players
-                    if getgenv().Maps[mp] ~= nil then
+                    if getgenv().Maps[mp.Value] ~= nil then
                         if (plrs.Value <= 0) then
                             jc = jc + 1
                             print("Join attempt...")
@@ -62,7 +62,7 @@ spawn(function()
                             getgenv().status = "Joined"
                             while wait() do
                                 getgenv().status = "Joined ("..Elevators.State.Timer.Value.."s)"
-                                if getgenv().Maps[mp] ~= nil then
+                                if getgenv().Maps[mp.Value] ~= nil then
                                     if antimulti then
                                         if (plrs.Value > 1) then
                                             local args = {
