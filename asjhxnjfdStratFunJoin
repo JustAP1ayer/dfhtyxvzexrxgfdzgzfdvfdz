@@ -68,6 +68,14 @@ spawn(function()
                             getgenv().status = "Joined"
                             while wait() do
                                 getgenv().status = "Joined ("..Elevators.State.Timer.Value.."s)"
+                                if Elevators.State.Timer.Value == 0 then
+                                    wait(1)
+                                    if Elevators.State.Timer.Value == 0 then
+                                        break
+                                        break
+                                        break
+                                    end
+                                end
                                 if getgenv().Maps[mp.Value] ~= nil then
                                     if antimulti then
                                         if (plrs.Value > 1) then
