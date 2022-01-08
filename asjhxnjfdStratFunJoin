@@ -112,7 +112,7 @@ spawn(function()
                     getgenv().repeating = true
                     print("Waiting for map...")
                     getgenv().status = "Waiting for map..."
-                    if getgenv().timer >= 30
+                    if getgenv().timer >= 30 then
 					getgenv().status = "Force changing maps..."
 					getgenv().timer = 0
 					for i, v in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
