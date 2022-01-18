@@ -54,7 +54,7 @@ spawn(function()
 					if getgenv().Maps[mp.Value] ~= nil then
 						if (plrs.Value <= 0) then
 							jc = jc + 1
-							prints("Join attempt...")
+							print("Join attempt...")
 							getgenv().status = "Joining..."
 							local args = {
 								[1] = "Elevators",
@@ -62,7 +62,7 @@ spawn(function()
 								[3] = Elevators
 							}
 							RSRF:InvokeServer(unpack(args))
-							prints("Joined elavator...")
+							print("Joined elavator...")
 							getgenv().status = "Joined"
 							while wait() do
 								getgenv().status = "Joined ("..Elevators.State.Timer.Value.."s)"
@@ -82,16 +82,16 @@ spawn(function()
 												[2] = "Leave"
 											}
 											RSRF:InvokeServer(unpack(args))
-											prints("Someone joined, leaving elevator...")
+											print("Someone joined, leaving elevator...")
 											getgenv().status = "Someone joined..."
 											getgenv().repeating = true
 											break
 										elseif (plrs.Value == 0) then
 											wait(1)
 											if (plrs.Value == 0) then
-											prints("Error")
+											print("Error")
 											getgenv().status = "Error occured, check dev con"
-											prints("Error occured, please report this message to #bugs on Money Maker Development discord server, remember about form!")
+											print("Error occured, please report this message to #bugs on Money Maker Development discord server, remember about form!")
 											local args = {
 												[1] = "Elevators",
 												[2] = "Leave"
@@ -108,7 +108,7 @@ spawn(function()
 										[2] = "Leave"
 									}
 									RSRF:InvokeServer(unpack(args))
-									prints("Map changed while joining, leaving...")
+									print("Map changed while joining, leaving...")
 									getgenv().status = "Map changed..."
 									getgenv().repeating = true
 									break
@@ -119,7 +119,7 @@ spawn(function()
 				end
 				if jc == 0 then
 					getgenv().repeating = true
-					prints("Waiting for map...")
+					print("Waiting for map...")
 					getgenv().status = "Waiting for map..."
 					if getgenv().timer >= 30 then
 					getgenv().status = "Force changing maps..."
