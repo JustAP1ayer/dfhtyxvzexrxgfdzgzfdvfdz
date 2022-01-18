@@ -3,7 +3,7 @@ spawn(function()
     local RSRF = RS:WaitForChild("RemoteFunction")
     local RSRE = RS:WaitForChild("RemoteEvent")
     function EquipTroop(troop)
-        if game.PlaceId == 5591597781 then
+        if not game.PlaceId == 5591597781 then
         local args = {
             [1] = "Inventory",
             [2] = "Execute",
