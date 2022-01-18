@@ -3,19 +3,21 @@ spawn(function()
     local RSRF = RS:WaitForChild("RemoteFunction")
     local RSRE = RS:WaitForChild("RemoteEvent")
     function EquipTroop(troop)
-        if not game.PlaceId == 5591597781 then
+        if game.PlaceId == 5591597781 then
+            getgenv().map = game:GetService("ReplicatedStorage").State.Map.Value
+        else
         local args = {
             [1] = "Inventory",
             [2] = "Execute",
             [3] = "Troops",
             [4] = "Add",
             [5] = {
-                ["Name"] = troop
+                ["Name"] = tostring(troop)
             }
         }
         game.ReplicatedStorage.RemoteEvent:FireServer(unpack(args))
         end
-        end
+    end
     function UnEquip()
         for TowerName, Tower in next, game.ReplicatedStorage.RemoteFunction:InvokeServer("Session", "Search", "Inventory.Troops") do
             if (Tower.Equipped) then
