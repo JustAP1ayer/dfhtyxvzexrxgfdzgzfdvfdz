@@ -62,6 +62,10 @@ spawn(function()
 								[3] = Elevators
 							}
 							RSRF:InvokeServer(unpack(args))
+                            UnEquip()
+                            for i,v in next, getgenv().Maps[mp.Value] do
+                                EquipTroop(v)
+                            end
 							print("Joined elavator...")
 							getgenv().status = "Joined"
 							while wait() do
@@ -72,6 +76,12 @@ spawn(function()
 										getgenv().status = "Teleporting..."
 										wait(60)
 										getgenv().status = "Teleport failed!"
+                                        local args = {
+                                            [1] = "Elevators",
+                                            [2] = "Leave"
+                                        }
+                                        RSRF:InvokeServer(unpack(args))
+                                        UnEquip()
                                     end
                                 end
 								if getgenv().Maps[mp.Value] ~= nil then
@@ -85,6 +95,7 @@ spawn(function()
 											print("Someone joined, leaving elevator...")
 											getgenv().status = "Someone joined..."
 											getgenv().repeating = true
+                                            UnEquip()
 											break
 										elseif (plrs.Value == 0) then
 											wait(1)
@@ -98,6 +109,7 @@ spawn(function()
 											}
 											RSRF:InvokeServer(unpack(args))
 											getgenv().repeating = true
+                                            UnEquip()
 											break
 											end
 										end
@@ -111,6 +123,7 @@ spawn(function()
 									print("Map changed while joining, leaving...")
 									getgenv().status = "Map changed..."
 									getgenv().repeating = true
+                                    UnEquip()
 									break
 								end
 							end
