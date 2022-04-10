@@ -1,4 +1,8 @@
 spawn(function()
+	function prints(mess)
+		appendfile("TDS_AutoStrat/LastPrintLog.txt",tostring(mess).."\n")
+		print(tostring(mess))
+	end
     local RS = game:WaitForChild('ReplicatedStorage')
     local RSRF = RS:WaitForChild("RemoteFunction")
     local RSRE = RS:WaitForChild("RemoteEvent")
