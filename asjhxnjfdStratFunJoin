@@ -104,7 +104,7 @@ spawn(function()
 											getgenv().repeating = true
 										end
 									end
-									if getgenv().Maps[mp.Value] ~= nil then
+									if getgenv().Maps[mp.Value] ~= nil and rq == getgenv().MultiStratType then
 										if antimulti then
 											if (plrs.Value > 1) then
 												RSRF:InvokeServer("Elevators","Leave")
@@ -153,7 +153,8 @@ spawn(function()
 						getgenv().timer = 0
 						for i, v in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
 							local plrs = v.State.Players
-							if plrs.Value <= 0 then
+							local rq = require(v.Settings).Type
+							if plrs.Value <= 0 and rq == getgenv().MultiStratType then
 								RSRF:InvokeServer("Elevators","Enter",v)
 								wait(1)
 								RSRF:InvokeServer("Elevators","Leave")
