@@ -47,6 +47,9 @@ spawn(function()
 		end)
         getgenv().BreakEvery = false
         getgenv().repeating = true
+		if not getgenv().MultiStratType then
+			getgenv().MultiStratType = "Survival"
+		end
 		spawn(function()
 			spawn(function()
 				getgenv().timer = 0
@@ -62,7 +65,8 @@ spawn(function()
 					for _, Elevators in pairs(game:GetService('Workspace').Elevators:GetChildren()) do
 						local mp = Elevators.State.Map.Title
 						local plrs = Elevators.State.Players
-						if getgenv().Maps[mp.Value] ~= nil then
+						local rq = require(Elevators.Settings).Type
+						if getgenv().Maps[mp.Value] ~= nil and rq == getgenv().MultiStratType then
 							if (plrs.Value <= 0) then
 								jc = jc + 1
 								prints("Join attempt...")
