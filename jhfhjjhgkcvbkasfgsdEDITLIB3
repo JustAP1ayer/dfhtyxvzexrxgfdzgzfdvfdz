@@ -969,9 +969,7 @@ do
 			animate()
 			
 			if callback then
-				callback(function(...)
-					self:updateKeybind(keybind, ...)
-				end)
+				callback()
 			end
 		end}
 		
