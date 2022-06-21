@@ -994,9 +994,7 @@ do
 				animate()
 				
 				if changedCallback then
-					changedCallback(key, function(...)
-						self:updateKeybind(keybind, ...)
-					end)
+					changedCallback(key)
 				end
 			end
 		end)
