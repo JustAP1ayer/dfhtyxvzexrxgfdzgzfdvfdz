@@ -661,6 +661,7 @@ do
 	end
 	
 	function section:addButton(title, callback)
+		local callback = callback or function() end
 		local button = utility:Create("ImageButton", {
 			Name = "Button",
 			Parent = self.container,
@@ -697,23 +698,14 @@ do
 			if debounce then
 				return
 			end
-			
-			-- animation
+			callback()
 			utility:Pop(button, 10)
 			
 			debounce = true
 			text.TextSize = 0
 			utility:Tween(button.Title, {TextSize = 14}, 0.2)
-			
 			wait(0.2)
 			utility:Tween(button.Title, {TextSize = 12}, 0.2)
-			
-			if callback then
-				callback(function(...)
-					self:updateButton(button, ...)
-				end)
-			end
-			
 			debounce = false
 		end)
 		
