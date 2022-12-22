@@ -7,32 +7,33 @@ spawn(function()
     local RSRF = RS:WaitForChild("RemoteFunction")
     local RSRE = RS:WaitForChild("RemoteEvent")
     function EquipTroop(troop)
-        if game.PlaceId ~= 5591597781 then
-        local args = {
-            [1] = "Inventory",
-            [2] = "Execute",
-            [3] = "Troops",
-            [4] = "Add",
-            [5] = {
-                ["Name"] = tostring(troop)
-            }
-        }
-        game.ReplicatedStorage.RemoteEvent:FireServer(unpack(args))
-        end
-    end
+		getgenv().troops5 = {}
+		for i,v in next, game.ReplicatedStorage.RemoteFunction:InvokeServer("Session", "Search", "Inventory.Troops") do
+			table.insert(getgenv().troops5, i)
+		end	
+		if not troop or troop == "Nil" then
+			troop = "nil"
+		end
+		if tostring(troop) ~= "nil" and table.find(getgenv().troops5, tostring(troop)) == nil then
+			game.Players.LocalPlayer:Kick("\n\n---------- AUTO STRAT ----------\n\nError 2:\nYou don't own "..tostring(troop).." troop.\n\n---------- AUTO STRAT ----------\n")
+			task.wait(0.5)
+			while true do end
+		end
+		RSRE:FireServer("Inventory","Equip","tower",troop)
+		if not getgenv().GoldenPerks then
+			getgenv().GoldenPerks = {}
+		end
+		if table.find(getgenv().GoldenPerks, troop) then
+			RSRF:InvokeServer("Inventory","Equip","Golden", troop)
+		else
+			RSRF:InvokeServer("Inventory","Unequip","Golden", troop)
+		end
+		getgenv().status = "Equipped "..troop
+	end
     function UnEquip()
         for TowerName, Tower in next, game.ReplicatedStorage.RemoteFunction:InvokeServer("Session", "Search", "Inventory.Troops") do
             if (Tower.Equipped) then
-                local args = {
-                    [1] = "Inventory",
-                    [2] = "Execute",
-                    [3] = "Troops",
-                    [4] = "Remove",
-                    [5] = {
-                        ["Name"] = TowerName
-                    }
-                }
-                game:GetService("ReplicatedStorage").RemoteEvent:FireServer(unpack(args))
+                game:GetService("ReplicatedStorage").RemoteFunction:InvokeServer("Inventory","Unequip","Tower",TowerName)
             end;
         end;
     end
